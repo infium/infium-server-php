@@ -40,9 +40,10 @@ try{
 	$pdo->exec('COMMIT');
 	
 	$response['Response'] = 'LocalActions';
-	$response['Data'][0]['Action'] = 'Reload';
-	$response['Data'][1]['Action'] = 'MessageFlash';
-	$response['Data'][1]['Message'] = 'Customer created #'.$customerCreate->getCustomerNumber();
+	$response['Data'][0]['Action'] = 'Pop';
+	$response['Data'][1]['Action'] = 'Reload';
+	$response['Data'][2]['Action'] = 'MessageFlash';
+	$response['Data'][2]['Message'] = 'Customer created #'.$customerCreate->getCustomerNumber();
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
