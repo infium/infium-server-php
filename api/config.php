@@ -166,7 +166,7 @@ function auditTrailLog($pdo, $table, $tableId, $operation){
 	global $now;
 	global $testing;
 	
-	if (!preg_match('/^[a-zA-Z]{1,32}$/', $table)){
+	if (!preg_match('/^[a-zA-Z]{1,64}$/', $table)){
 		throw new Exception('The table must consist of the letters A-Z or a-z. No other characters.');
 	}
 	
