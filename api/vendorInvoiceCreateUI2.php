@@ -67,7 +67,11 @@ try{
 			
 			$results2 = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE (AccountNumber=? AND Year=?)', array($input['Row'][$i]['Account'],substr($input['BookingDate'], 0, 4)));
 			
-			$tax = dbPrepareExecute($pdo, 'SELECT TaxPercent, AccountTaxOutput, AccountTaxInput FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE Type=? AND TaxGroupCustomerOrVendor=? AND TaxGroupArticleOrAccount=?', array('Buy', $results[0]['TaxGroup'], $taxGroup));
+			$tax = dbPrepareExecute($pdo, 'SELECT TaxPercent, AccountTaxOutput, AccountTaxInput FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE Type=? AND TaxGroupCustomerOrVendor=? AND TaxGroupArticleOrAccount=? AND FromDate<=? AND ToDate>=?', array('Buy', $results[0]['TaxGroup'], $taxGroup, $input['BookingDate'], $input['BookingDate']));
+			
+			if (count($tax) != 1){
+				throw new Exception('No tax rules created that match your booking. Please contact the support.');
+			}
 			
 			$ui->addLabelValue('Account:', $input['Row'][$i]['Account'].' '.$results2[0]['Description']);
 			$ui->addLabelValue('Amount:', decimalFormat($input['Row'][$i]['Amount']));
