@@ -57,8 +57,12 @@ try{
 		
 			$results2 = dbPrepareExecute($pdo, 'SELECT Description, TaxGroup FROM Article WHERE Number=?', array($input['Row'][$i]['ArticleID']));
 		
-			$tax = dbPrepareExecute($pdo, 'SELECT TaxPercent FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE Type=? AND TaxGroupCustomerOrVendor=? AND TaxGroupArticleOrAccount=?', array('Sell', $results[0]['TaxGroup'], $results2[0]['TaxGroup']));
-		
+			$tax = dbPrepareExecute($pdo, 'SELECT TaxPercent FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE Type=? AND TaxGroupCustomerOrVendor=? AND TaxGroupArticleOrAccount=? AND FromDate<=? AND ToDate>=?', array('Sell', $results[0]['TaxGroup'], $results2[0]['TaxGroup'], $input['BookingDate'], $input['BookingDate']));
+			
+			if (count($tax) != 1){
+				throw new Exception('No tax rules created that match your booking. Please contact the support.');
+			}
+			
 			$input['Row'][$i]['Quantity'] = str_replace(',', '.', $input['Row'][$i]['Quantity']);
 			$input['Row'][$i]['Price'] = str_replace(',', '.', $input['Row'][$i]['Price']);
 		
