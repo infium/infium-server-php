@@ -89,7 +89,7 @@ try {
 		auditTrailLog($pdo, 'TaxReportRow', $pdo->lastInsertId(), 'INSERT');
 	}
 	
-	if (('2015-01-01' <= $input['DateFrom'])&&('2015-12-31' >= $input['DateTo'])){
+	if (('2015-01-01' <= $input['DateFrom'])&&('2016-12-31' >= $input['DateTo'])){
 		$customersProducts = dbPrepareExecute($pdo, 'SELECT DISTINCT TaxNumber FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_PRODUCT_25\' OR TaxCode=\'SELL_EU_PRODUCT_12\' OR TaxCode=\'SELL_EU_PRODUCT_6\' OR TaxCode=\'SELL_EU_PRODUCT_0\') AND BookingDate>=? AND BookingDate<=?', array($input['DateFrom'], $input['DateTo']));
 		
 		foreach ($customersProducts as $row){
