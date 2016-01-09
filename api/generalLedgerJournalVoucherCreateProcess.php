@@ -8,6 +8,10 @@ $input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
 
 try {
 
+	$pdo = createPdo();
+
+	$pdo->exec('START TRANSACTION');
+
 	$booking = new GeneralLedgerAccountBooking();
 
 	$booking->setDate($input['Date']);
@@ -27,13 +31,33 @@ try {
 			}else{
 				$credit = $bookingRow['Credit'];
 			}
-			$booking->addRow($bookingRow['Account'], '', $debit, $credit);
+			
+			if (substr($bookingRow['Account'], 0, 2) == 'C-'){
+				
+				$customer = dbPrepareExecute($pdo, 'SELECT Id FROM Customer WHERE Number=?', array(substr($bookingRow['Account'], 2)));
+				$booking->addRowAdvanced('1510', $customer[0]['Id'], '', '', '', $debit, $credit, '', '', '');
+				
+			} elseif(substr($bookingRow['Account'], 0, 2) == 'V-'){
+				
+				$vendor = dbPrepareExecute($pdo, 'SELECT Id FROM Vendor WHERE Number=?', array(substr($bookingRow['Account'], 2)));
+				$booking->addRowAdvanced('2441', $vendor[0]['Id'], '', '', '', $debit, $credit, '', '', '');
+				
+			}else{
+				
+				if ($bookingRow['Account'] == '1510'){
+					throw new Exception('Booking directly on account 1510 is not allowed. You need to book on a customer account.');
+				}
+				
+				if ($bookingRow['Account'] == '2441'){
+					throw new Exception('Booking directly on account 2441 is not allowed. You need to book on a vendor account.');
+				}
+				
+				$booking->addRowAdvanced($bookingRow['Account'], '', '', '', '', $debit, $credit, '', '', '');
+				
+			}
 		}
 	}
 
-	$pdo = createPdo();
-
-	$pdo->exec('START TRANSACTION');
 
 	$booking->validateAndWriteToDatabase($pdo);
 

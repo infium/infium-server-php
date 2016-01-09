@@ -17,7 +17,7 @@ $ui->addField('Text',NULL,'Text');
 
 $ui->addTable('Row');
 
-$ui->addSearchSelection('Account','Account',$baseUrl.'reportGeneralLedgerSearchAccount.php', 'Row');
+$ui->addSearchSelection('Account','Account',$baseUrl.'generalLedgerJournalVoucherCreateUISearchAccount.php', 'Row');
 $ui->addField('Debit','Row','Debit');
 $ui->addField('Credit','Row','Credit');
 
