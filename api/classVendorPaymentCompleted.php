@@ -29,7 +29,7 @@ class VendorPaymentCompleted {
 		$this->documentNumber = nextDocumentNumber($InternalDb, 'VendorPaymentCompleted');
 		
 		$stmt2 = $InternalDb->prepare('INSERT INTO VendorPaymentCompleted (Number, BookingDate, PartnerDate, AccountNumber, Amount) VALUES (?, ?, ?, ?, ?)');
-		$stmt2->execute(array($this->documentNumber, $this->date, $this->date, '1930', $this->amountDocument));
+		$stmt2->execute(array($this->documentNumber, $this->date, $this->date, '1920', $this->amountDocument));
 		
 		$this->id = $InternalDb->lastInsertId();
 		
@@ -52,7 +52,7 @@ class VendorPaymentCompleted {
 			$credit = $amountBank * -1;
 		}
 		
-		$booking->addRowAdvanced('1930', '', '', '', '', $debit, $credit, 'VendorPaymentCompleted', $this->documentNumber, '');
+		$booking->addRowAdvanced('1920', '', '', '', '', $debit, $credit, 'VendorPaymentCompleted', $this->documentNumber, '');
 		
 		foreach ($this->row as $paymentRow){
 			
