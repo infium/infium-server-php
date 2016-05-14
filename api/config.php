@@ -351,7 +351,6 @@ function validateNewAccountNumber($accountNumber){
 }
 
 function validateNumber($number){
-	$number = str_replace (',', '.', $number);
 	if (!preg_match('/^\-{0,1}[0-9]{1,16}\.{0,1}[0-9]{0,2}$/', $number)){
 		throw new Exception('Numbers need to be in the format (-)NNNNN.NN');
 	}
