@@ -11,7 +11,7 @@ try {
 	$type = $input['Type'];
 	$number = $input['Number'];
 
-	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'Customer')||($type == 'Vendor')||($type == 'Article')||($type == 'TaxReport')||($type == 'User')){
+	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'GeneralLedgerAccountClearing')||($type == 'Customer')||($type == 'Vendor')||($type == 'Article')||($type == 'TaxReport')||($type == 'User')){
 		$pdo = createPdo();
 		
 		if ($type == 'User'){

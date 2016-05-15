@@ -16,6 +16,7 @@ $titleBarColorVendorPaymentCompleted = $titleBarColorVendor;
 
 $titleBarColorGeneralLedger = '#ED462F';
 $titleBarColorGeneralLedgerJournalVoucher = $titleBarColorGeneralLedger;
+$titleBarColorGeneralLedgerClearing = $titleBarColorGeneralLedger;
 
 $titleBarColorReport = '#F5A031';
 $titleBarColorReportProfitAndLoss = $titleBarColorReport;

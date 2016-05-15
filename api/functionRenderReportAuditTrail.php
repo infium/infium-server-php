@@ -25,7 +25,7 @@ function renderReportAuditTrail($type, $number){
 	
 	$pdo->exec('START TRANSACTION WITH CONSISTENT SNAPSHOT;');
 
-	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'TaxReport')){
+	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'GeneralLedgerAccountClearing')||($type == 'TaxReport')){
 		$id = dbPrepareExecute($pdo, 'SELECT Id FROM '.$type.' WHERE Number=?', array($number));
 		
 		$auditTrailHeader = dbPrepareExecute($pdo, 'SELECT `Operation`, `Data`, `Time`, `User`, `IP` FROM `AuditTrail` WHERE `Table`=? AND `TableId`=?', array($type, $id[0]['Id']));
@@ -103,7 +103,7 @@ function renderReportAuditTrail($type, $number){
 	<table style="'.getStyle('table','width: 100%;').'">';
 
 
-	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'TaxReport')){
+	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'GeneralLedgerAccountClearing')||($type == 'TaxReport')){
 		
 		$previousRowData = array();
 		
