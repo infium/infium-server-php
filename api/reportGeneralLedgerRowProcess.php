@@ -15,7 +15,7 @@ $ui = new UserInterface();
 
 $ui->setTitle('Journal voucher #' . $_GET['Number']);
 
-$header = dbPrepareExecute($pdo, 'SELECT BookingDate, DocumentType, DocumentTypeNumber FROM GeneralLedgerAccountBooking WHERE Number=? AND Year=?', array($_GET['Number'], $_GET['Year']));
+$header = dbPrepareExecute($pdo, 'SELECT BookingDate, DocumentType, DocumentTypeNumber FROM GeneralLedgerAccountBooking WHERE Number=?', array($_GET['Number']));
 
 $ui->addLabelValueLink('Booking date', $header[0]['BookingDate']);
 
@@ -37,13 +37,13 @@ switch ($header[0]['DocumentType']) {
 		break;    
 }
 
-$rows = dbPrepareExecute($pdo, 'SELECT AccountNumber, Debit, Credit FROM GeneralLedgerAccountBookingRow WHERE Number=? AND Year=? ORDER BY Id', array($_GET['Number'], $_GET['Year']));
+$rows = dbPrepareExecute($pdo, 'SELECT AccountNumber, Debit, Credit FROM GeneralLedgerAccountBookingRow WHERE Number=? ORDER BY Id', array($_GET['Number']));
 
 $i = 0;
 
 foreach ($rows as $row){
 	
-	$accountDescription = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE AccountNumber=? AND Year=?', array($row['AccountNumber'], $_GET['Year']));
+	$accountDescription = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE AccountNumber=? AND Year=? ORDER BY Year DESC', array($row['AccountNumber'], $_GET['Year']));
 	$i++;
 	$ui->addLabelHeader('Row '.$i);
 	$ui->addLabelValueLink('Account', $row['AccountNumber'] . ' ' . $accountDescription[0]['Description']);
