@@ -6,6 +6,7 @@ require('functionExtendedLogging.php');
 
 $now = time();
 
+$baseUrl = 'https://infium-eu.appspot.com/api/';
 // We store the sending e-mail address for automatic documents in the variable $emailFrom.
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
 $extendedLogging = true;
@@ -37,17 +38,6 @@ $titleBarColorAdministrationArticleDatabase = $titleBarColorAdministration;
 $titleBarColorAdministrationUserDatabase = $titleBarColorAdministration;
 $titleBarColorAdministrationChartOfAccounts = $titleBarColorAdministration;
 $titleBarColorAdministrationProperty = $titleBarColorAdministration;
-
-
-if ($_SERVER['SERVER_NAME'] == 'localhost'){
-	$baseUrl = 'http://localhost:8888/infium-eu/api/';	
-}else{
-	$baseUrl = 'https://infium-eu.appspot.com/api/';
-}
-
-if ($_SERVER['SERVER_NAME'] == 'sandbox.infium-eu.appspot.com'){
-	$baseUrl = 'http://sandbox.infium-eu.appspot.com/api/';
-}
 
 function nextAuditId ($pdo, $documentType){
 	return nextDocumentNumber($pdo, $documentType);
