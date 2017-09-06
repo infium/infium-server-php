@@ -14,6 +14,10 @@ $baseUrl = 'https://infium-eu.appspot.com/api/';
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
 $extendedLogging = true;
 
+$databaseDSN = 'mysql:unix_socket=/cloudsql/infium-eu:eu1';
+$databaseUsername = 'root';
+$databasePasswd = '';
+
 $titleBarColorCustomer = '#59B750';
 $titleBarColorCustomerInvoice = '#59B750';
 $titleBarColorCustomerPayment = '#59B750';
