@@ -8,6 +8,7 @@ require('functionMatchOpenItems.php');
 require('functionAuditTrailLog.php');
 require('functionNextDocumentNumber.php');
 require('functionDecimalFormat.php');
+require('functionSendMessageToClient.php');
 
 $baseUrl = 'https://infium-eu.appspot.com/api/';
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
@@ -40,15 +41,6 @@ $titleBarColorAdministrationArticleDatabase = '#E54E9A';
 $titleBarColorAdministrationUserDatabase = '#E54E9A';
 $titleBarColorAdministrationChartOfAccounts = '#E54E9A';
 $titleBarColorAdministrationProperty = '#E54E9A';
-
-function sendMessageToClient($message){
-	$response['Response'] = 'LocalActions';
-	$response['Data'][0]['Action'] = 'MessageFlash';
-	$response['Data'][0]['Message'] = $message;
-	
-	header('Content-type: application/json');
-	echo json_encode($response,JSON_PRETTY_PRINT);
-}
 
 if ($extendedLogging){
     createExtendedLog();
