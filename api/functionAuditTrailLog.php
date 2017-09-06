@@ -1,4 +1,6 @@
 <?php
+$now = time();
+
 function auditTrailLog($pdo, $table, $tableId, $operation){
     global $now;
     global $testing;

@@ -8,8 +8,6 @@ require('functionMatchOpenItems.php');
 require('functionAuditTrailLog.php');
 require('functionNextDocumentNumber.php');
 
-$now = time();
-
 $baseUrl = 'https://infium-eu.appspot.com/api/';
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
 $extendedLogging = true;
