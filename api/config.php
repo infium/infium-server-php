@@ -2,11 +2,13 @@
 require('functionValidations.php');
 require('functionEmail.php');
 require('functionDatabase.php');
+require('functionExtendedLogging.php');
 
 $now = time();
 
 // We store the sending e-mail address for automatic documents in the variable $emailFrom.
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
+$extendedLogging = true;
 
 $titleBarColorCustomer = '#59B750';
 $titleBarColorCustomerInvoice = $titleBarColorCustomer;
@@ -36,7 +38,6 @@ $titleBarColorAdministrationUserDatabase = $titleBarColorAdministration;
 $titleBarColorAdministrationChartOfAccounts = $titleBarColorAdministration;
 $titleBarColorAdministrationProperty = $titleBarColorAdministration;
 
-syslog(LOG_INFO, 'SERVER_NAME = ' . $_SERVER['SERVER_NAME']);	
 
 if ($_SERVER['SERVER_NAME'] == 'localhost'){
 	$baseUrl = 'http://localhost:8888/infium-eu/api/';	
@@ -47,28 +48,6 @@ if ($_SERVER['SERVER_NAME'] == 'localhost'){
 if ($_SERVER['SERVER_NAME'] == 'sandbox.infium-eu.appspot.com'){
 	$baseUrl = 'http://sandbox.infium-eu.appspot.com/api/';
 }
-
-if (isset($_SERVER['HTTP_X_CLIENT_PLATFORM'])){
-	syslog(LOG_INFO, 'X-Client-Platform = ' . $_SERVER['HTTP_X_CLIENT_PLATFORM']);	
-}
-
-if (isset($_SERVER['HTTP_X_CLIENT_PLATFORM_VERSION'])){
-	syslog(LOG_INFO, 'X-Client-Platform-Version = ' . $_SERVER['HTTP_X_CLIENT_PLATFORM_VERSION']);
-}
-
-if (isset($_SERVER['HTTP_X_CLIENT_PLATFORM_DEVICE'])){
-	syslog(LOG_INFO, 'X-Client-Platform-Device = ' . $_SERVER['HTTP_X_CLIENT_PLATFORM_DEVICE']);
-}
-
-if (isset($_SERVER['HTTP_X_CLIENT_PLATFORM_LANGUAGE'])){
-	syslog(LOG_INFO, 'X-Client-Platform-Language = ' . $_SERVER['HTTP_X_CLIENT_PLATFORM_LANGUAGE']);
-}
-
-if (isset($_SERVER['HTTP_X_CLIENT_APP_VERSION'])){
-	syslog(LOG_INFO, 'X-Client-App-Version = ' . $_SERVER['HTTP_X_CLIENT_APP_VERSION']);
-}
-
-
 
 function nextAuditId ($pdo, $documentType){
 	return nextDocumentNumber($pdo, $documentType);
@@ -253,5 +232,9 @@ function matchOpenItems ($pdo, $date, $account, $subAccount, $reference){
 			auditTrailLog($pdo, 'GeneralLedgerAccountClearingRow', $pdo->lastInsertId(), 'INSERT');
 		}
 	}
+}
+
+if ($extendedLogging){
+    createExtendedLog();
 }
 ?>
