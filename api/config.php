@@ -7,7 +7,6 @@ require('functionExtendedLogging.php');
 $now = time();
 
 $baseUrl = 'https://infium-eu.appspot.com/api/';
-// We store the sending e-mail address for automatic documents in the variable $emailFrom.
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
 $extendedLogging = true;
 
