@@ -7,6 +7,7 @@ require('functionUserValidation.php');
 require('functionMatchOpenItems.php');
 require('functionAuditTrailLog.php');
 require('functionNextDocumentNumber.php');
+require('functionDecimalFormat.php');
 
 $baseUrl = 'https://infium-eu.appspot.com/api/';
 $emailFrom = 'noreply@infium-eu.appspotmail.com';
@@ -39,17 +40,6 @@ $titleBarColorAdministrationArticleDatabase = '#E54E9A';
 $titleBarColorAdministrationUserDatabase = '#E54E9A';
 $titleBarColorAdministrationChartOfAccounts = '#E54E9A';
 $titleBarColorAdministrationProperty = '#E54E9A';
-
-function decimalFormat($value){
-	
-	$valueFormatted = number_format($value,2,'.',',');
-	
-	if ($valueFormatted == '-0.00'){
-		return '0.00';
-	}else{
-		return $valueFormatted;
-	}
-}
 
 function sendMessageToClient($message){
 	$response['Response'] = 'LocalActions';
