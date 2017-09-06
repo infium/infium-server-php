@@ -12,32 +12,32 @@ $emailFrom = 'noreply@infium-eu.appspotmail.com';
 $extendedLogging = true;
 
 $titleBarColorCustomer = '#59B750';
-$titleBarColorCustomerInvoice = $titleBarColorCustomer;
-$titleBarColorCustomerPayment = $titleBarColorCustomer;
+$titleBarColorCustomerInvoice = '#59B750';
+$titleBarColorCustomerPayment = '#59B750';
 
 $titleBarColorVendor = '#4169B9';
-$titleBarColorVendorInvoice = $titleBarColorVendor;
-$titleBarColorVendorPaymentList = $titleBarColorVendor;
-$titleBarColorVendorPaymentCompleted = $titleBarColorVendor;
+$titleBarColorVendorInvoice = '#4169B9';
+$titleBarColorVendorPaymentList = '#4169B9';
+$titleBarColorVendorPaymentCompleted = '#4169B9';
 
 $titleBarColorGeneralLedger = '#ED462F';
-$titleBarColorGeneralLedgerJournalVoucher = $titleBarColorGeneralLedger;
-$titleBarColorGeneralLedgerClearing = $titleBarColorGeneralLedger;
+$titleBarColorGeneralLedgerJournalVoucher = '#ED462F';
+$titleBarColorGeneralLedgerClearing = '#ED462F';
 
 $titleBarColorReport = '#F5A031';
-$titleBarColorReportProfitAndLoss = $titleBarColorReport;
-$titleBarColorReportBalanceSheet = $titleBarColorReport;
-$titleBarColorReportGeneralLedger = $titleBarColorReport;
-$titleBarColorReportTax = $titleBarColorReport;
-$titleBarColorReportAuditTrail = $titleBarColorReport;
+$titleBarColorReportProfitAndLoss = '#F5A031';
+$titleBarColorReportBalanceSheet = '#F5A031';
+$titleBarColorReportGeneralLedger = '#F5A031';
+$titleBarColorReportTax = '#F5A031';
+$titleBarColorReportAuditTrail = '#F5A031';
 
 $titleBarColorAdministration = '#E54E9A';
-$titleBarColorAdministrationCustomerDatabase = $titleBarColorAdministration;
-$titleBarColorAdministrationVendorDatabase = $titleBarColorAdministration;
-$titleBarColorAdministrationArticleDatabase = $titleBarColorAdministration;
-$titleBarColorAdministrationUserDatabase = $titleBarColorAdministration;
-$titleBarColorAdministrationChartOfAccounts = $titleBarColorAdministration;
-$titleBarColorAdministrationProperty = $titleBarColorAdministration;
+$titleBarColorAdministrationCustomerDatabase = '#E54E9A';
+$titleBarColorAdministrationVendorDatabase = '#E54E9A';
+$titleBarColorAdministrationArticleDatabase = '#E54E9A';
+$titleBarColorAdministrationUserDatabase = '#E54E9A';
+$titleBarColorAdministrationChartOfAccounts = '#E54E9A';
+$titleBarColorAdministrationProperty = '#E54E9A';
 
 function nextAuditId ($pdo, $documentType){
 	return nextDocumentNumber($pdo, $documentType);
