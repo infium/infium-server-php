@@ -72,7 +72,13 @@ try {
 		
 		processSection($pdo, $row['Id'], $parentIdNew, 0, 0);
 	}
-	
+
+    $results = dbPrepareExecute($pdo, 'SELECT TaxRuleSet, Type, TaxGroupCustomerOrVendor, TaxGroupArticleOrAccount, AccountArticle, AccountArticleTaxCode, TaxPercent, AccountTaxOutput, AccountTaxOutputTaxCode, AccountTaxInput, AccountTaxInputTaxCode FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE FromDate=? AND ToDate=?', array($copyFromYear.'-01-01', $copyFromYear.'-12-31'));
+    foreach ($results as $row){
+        dbPrepareExecute($pdo, 'INSERT INTO GeneralLedgerAccountDeterminationInvoiceRow (TaxRuleSet, FromDate, ToDate, Type, TaxGroupCustomerOrVendor, TaxGroupArticleOrAccount, AccountArticle, AccountArticleTaxCode, TaxPercent, AccountTaxOutput, AccountTaxOutputTaxCode, AccountTaxInput, AccountTaxInputTaxCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($row['TaxRuleSet'], $inputVisible['Year'].'-01-01', $inputVisible['Year'].'-12-31', $row['Type'], $row['TaxGroupCustomerOrVendor'], $row['TaxGroupArticleOrAccount'], $row['AccountArticle'], $row['AccountArticleTaxCode'], $row['TaxPercent'], $row['AccountTaxOutput'], $row['AccountTaxOutputTaxCode'], $row['AccountTaxInput'], $row['AccountTaxInputTaxCode']));
+        auditTrailLog($pdo, 'GeneralLedgerAccountDeterminationInvoiceRow', $pdo->lastInsertId(), 'INSERT');
+    }
+
 	$pdo->exec('COMMIT');
 	
 	$response['Response'] = 'LocalActions';
