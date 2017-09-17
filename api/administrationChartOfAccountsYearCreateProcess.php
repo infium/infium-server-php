@@ -79,7 +79,19 @@ try {
         auditTrailLog($pdo, 'GeneralLedgerAccountDeterminationInvoiceRow', $pdo->lastInsertId(), 'INSERT');
     }
 
-	$pdo->exec('COMMIT');
+    $results = dbPrepareExecute($pdo, 'SELECT TaxRuleSet, `Order`, Field, Description FROM TaxField WHERE FromDate=? AND ToDate=?', array($copyFromYear.'-01-01', $copyFromYear.'-12-31'));
+    foreach ($results as $row){
+        dbPrepareExecute($pdo, 'INSERT INTO TaxField (TaxRuleSet, FromDate, ToDate, `Order`, Field, Description) VALUES (?, ?, ?, ?, ?, ?)', array($row['TaxRuleSet'], $inputVisible['Year'].'-01-01', $inputVisible['Year'].'-12-31', $row['Order'], $row['Field'], $row['Description']));
+        auditTrailLog($pdo, 'TaxField', $pdo->lastInsertId(), 'INSERT');
+    }
+
+    $results = dbPrepareExecute($pdo, 'SELECT TaxRuleSet, Field, TaxCode, MoveFromAccount, MoveFromAccountTaxCode, MoveToAccount, MoveToAccountTaxCode, ReversedSignInReport FROM TaxFieldCalculation WHERE FromDate=? AND ToDate=?', array($copyFromYear.'-01-01', $copyFromYear.'-12-31'));
+    foreach ($results as $row){
+        dbPrepareExecute($pdo, 'INSERT INTO TaxFieldCalculation (TaxRuleSet, FromDate, ToDate, Field, TaxCode, MoveFromAccount, MoveFromAccountTaxCode, MoveToAccount, MoveToAccountTaxCode, ReversedSignInReport) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($row['TaxRuleSet'], $inputVisible['Year'].'-01-01', $inputVisible['Year'].'-12-31', $row['Field'], $row['TaxCode'], $row['MoveFromAccount'], $row['MoveFromAccountTaxCode'], $row['MoveToAccount'], $row['MoveToAccountTaxCode'], $row['ReversedSignInReport']));
+        auditTrailLog($pdo, 'TaxFieldCalculation', $pdo->lastInsertId(), 'INSERT');
+    }
+
+    $pdo->exec('COMMIT');
 	
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
