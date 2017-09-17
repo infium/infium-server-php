@@ -1,8 +1,10 @@
 Infium Server (PHP)
 ===================
-Before using this software, make sure that all the requirements for
-the usage are met. If you find any bugs, please report them on
-GitHub.
+Before using this software, make sure that you test the application so
+that everything is calculated as expected. It is a big application and
+there might be bugs in the code. It is provided "as is" without any
+guarantees under the Apache License version 2.0 (see below). If you
+find any bugs, please report them on GitHub.
 
 Installation
 ------------
