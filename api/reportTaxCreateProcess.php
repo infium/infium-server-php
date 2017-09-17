@@ -89,30 +89,20 @@ try {
 		auditTrailLog($pdo, 'TaxReportRow', $pdo->lastInsertId(), 'INSERT');
 	}
 
-	if (('2015-01-01' <= $input['DateFrom'])&&('2017-12-31' >= $input['DateTo'])){
-		$customersProducts = dbPrepareExecute($pdo, 'SELECT DISTINCT TaxNumber FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_PRODUCT_25\' OR TaxCode=\'SELL_EU_PRODUCT_12\' OR TaxCode=\'SELL_EU_PRODUCT_6\' OR TaxCode=\'SELL_EU_PRODUCT_0\') AND BookingDate>=? AND BookingDate<=?', array($input['DateFrom'], $input['DateTo']));
+	$customersProducts = dbPrepareExecute($pdo, 'SELECT DISTINCT TaxNumber FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_PRODUCT_25\' OR TaxCode=\'SELL_EU_PRODUCT_12\' OR TaxCode=\'SELL_EU_PRODUCT_6\' OR TaxCode=\'SELL_EU_PRODUCT_0\') AND BookingDate>=? AND BookingDate<=?', array($input['DateFrom'], $input['DateTo']));
 
-		foreach ($customersProducts as $row){
-			$amount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) AS Amount FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_PRODUCT_25\' OR TaxCode=\'SELL_EU_PRODUCT_12\' OR TaxCode=\'SELL_EU_PRODUCT_6\' OR TaxCode=\'SELL_EU_PRODUCT_0\') AND BookingDate>=? AND BookingDate<=? AND TaxNumber=?', array($input['DateFrom'], $input['DateTo'], $row['TaxNumber']));
+	foreach ($customersProducts as $row){
+		$amount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) AS Amount FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_PRODUCT_25\' OR TaxCode=\'SELL_EU_PRODUCT_12\' OR TaxCode=\'SELL_EU_PRODUCT_6\' OR TaxCode=\'SELL_EU_PRODUCT_0\') AND BookingDate>=? AND BookingDate<=? AND TaxNumber=?', array($input['DateFrom'], $input['DateTo'], $row['TaxNumber']));
+		dbPrepareExecute($pdo, 'INSERT INTO TaxReportRegionRow (ParentId, Number, Region, Type, ProductOrService, TaxNumber, Amount) VALUES (?, ?, ?, ?, ?, ?, ?)', array($documentId, $documentNumber, 'EU', 'Sell', 'Product', $row['TaxNumber'], $amount[0]['Amount']*-1));
+		auditTrailLog($pdo, 'TaxReportRegionRow', $pdo->lastInsertId(), 'INSERT');
+	}
 
-			dbPrepareExecute($pdo, 'INSERT INTO TaxReportRegionRow (ParentId, Number, Region, Type, ProductOrService, TaxNumber, Amount) VALUES (?, ?, ?, ?, ?, ?, ?)', array($documentId, $documentNumber, 'EU', 'Sell', 'Product', $row['TaxNumber'], $amount[0]['Amount']*-1));
+	$customersServices = dbPrepareExecute($pdo, 'SELECT DISTINCT TaxNumber FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_SERVICE_25\' OR TaxCode=\'SELL_EU_SERVICE_12\' OR TaxCode=\'SELL_EU_SERVICE_6\' OR TaxCode=\'SELL_EU_SERVICE_0\') AND BookingDate>=? AND BookingDate<=?', array($input['DateFrom'], $input['DateTo']));
 
-			auditTrailLog($pdo, 'TaxReportRegionRow', $pdo->lastInsertId(), 'INSERT');
-		}
-
-
-		$customersServices = dbPrepareExecute($pdo, 'SELECT DISTINCT TaxNumber FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_SERVICE_25\' OR TaxCode=\'SELL_EU_SERVICE_12\' OR TaxCode=\'SELL_EU_SERVICE_6\' OR TaxCode=\'SELL_EU_SERVICE_0\') AND BookingDate>=? AND BookingDate<=?', array($input['DateFrom'], $input['DateTo']));
-
-		foreach ($customersProducts as $row){
-			$amount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) AS Amount FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_SERVICE_25\' OR TaxCode=\'SELL_EU_SERVICE_12\' OR TaxCode=\'SELL_EU_SERVICE_6\' OR TaxCode=\'SELL_EU_SERVICE_0\') AND BookingDate>=? AND BookingDate<=? AND TaxNumber=?', array($input['DateFrom'], $input['DateTo'], $row['TaxNumber']));
-
-			dbPrepareExecute($pdo, 'INSERT INTO TaxReportRegionRow (ParentId, Number, Region, Type, ProductOrService, TaxNumber, Amount) VALUES (?, ?, ?, ?, ?, ?, ?)', array($documentId, $documentNumber, 'EU', 'Sell', 'Service', $row['TaxNumber'], $amount[0]['Amount']*-1));
-
-			auditTrailLog($pdo, 'TaxReportRegionRow', $pdo->lastInsertId(), 'INSERT');
-		}
-
-	}else{
-		throw new Exception('Tax rules does not exist for calculation of sales breakdown.');
+	foreach ($customersProducts as $row){
+		$amount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) AS Amount FROM GeneralLedgerAccountBookingRow WHERE (TaxCode=\'SELL_EU_SERVICE_25\' OR TaxCode=\'SELL_EU_SERVICE_12\' OR TaxCode=\'SELL_EU_SERVICE_6\' OR TaxCode=\'SELL_EU_SERVICE_0\') AND BookingDate>=? AND BookingDate<=? AND TaxNumber=?', array($input['DateFrom'], $input['DateTo'], $row['TaxNumber']));
+		dbPrepareExecute($pdo, 'INSERT INTO TaxReportRegionRow (ParentId, Number, Region, Type, ProductOrService, TaxNumber, Amount) VALUES (?, ?, ?, ?, ?, ?, ?)', array($documentId, $documentNumber, 'EU', 'Sell', 'Service', $row['TaxNumber'], $amount[0]['Amount']*-1));
+		auditTrailLog($pdo, 'TaxReportRegionRow', $pdo->lastInsertId(), 'INSERT');
 	}
 
 	$booking = new GeneralLedgerAccountBooking();
