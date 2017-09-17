@@ -34,6 +34,8 @@ $databaseDSN = 'mysql:unix_socket=/cloudsql/infium-eu:eu1';
 $databaseUsername = 'root';
 $databasePasswd = '';
 
+$version = '1.1.0';
+
 $titleBarColorCustomer = '#59B750';
 $titleBarColorCustomerInvoice = '#59B750';
 $titleBarColorCustomerPayment = '#59B750';
