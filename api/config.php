@@ -26,13 +26,14 @@ require('functionNextDocumentNumber.php');
 require('functionDecimalFormat.php');
 require('functionSendMessageToClient.php');
 
-$baseUrl = 'https://infium-eu.appspot.com/api/';
-$emailFrom = 'noreply@infium-eu.appspotmail.com';
-$extendedLogging = true;
+$baseUrl = 'https://www.company.com/api/';
+$emailFrom = 'noreply@company.com';
 
-$databaseDSN = 'mysql:unix_socket=/cloudsql/infium-eu:eu1';
-$databaseUsername = 'root';
-$databasePasswd = '';
+$databaseDSN = 'mysql:host=sql.company.com';
+$databaseUsername = 'username';
+$databasePasswd = 'password';
+
+$extendedLogging = true;
 
 $version = '1.1.0';
 
