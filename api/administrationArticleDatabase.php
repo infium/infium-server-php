@@ -24,12 +24,31 @@ $ui = new UserInterface();
 
 $ui->setTitle('Article');
 
-if (checkUserAccessBoolean('AdministrationArticleDatabase')){
-	$ui->addLabelValueLink('Search', NULL, 'GET', $baseUrl.'administrationArticleDatabaseSearchUI.php', NULL, $titleBarColorAdministrationArticleDatabase);
+$pdo = createPdo();
+
+$resultsActive = dbPrepareExecute($pdo, "SELECT Id, Number, Description FROM Article WHERE Active=? ORDER BY Description ASC", array(True));
+
+if (count($resultsActive) > 0){
+    $ui->addLabelHeader('Active');
 }
 
+foreach ($resultsActive as $row){
+    $ui->addLabelValueLink($row['Number'].' '.$row['Description'], NULL, 'GET', $baseUrl.'administrationArticleDatabaseEditUI.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationArticleDatabase);
+}
+
+$resultsInactive = dbPrepareExecute($pdo, "SELECT Id, Number, Description FROM Article WHERE Active=? ORDER BY Description ASC", array(False));
+
+if (count($resultsInactive) > 0){
+    $ui->addLabelHeader('Inactive');
+}
+
+foreach ($resultsInactive as $row){
+    $ui->addLabelValueLink($row['Number'].' '.$row['Description'], NULL, 'GET', $baseUrl.'administrationArticleDatabaseEditUI.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationArticleDatabase);
+}
+
+
 if (checkUserAccessBoolean('AdministrationArticleDatabase')){
-	$ui->addLabelValueLink('Add', NULL, 'GET', $baseUrl.'administrationArticleDatabaseAddUI.php', NULL, $titleBarColorAdministrationArticleDatabase);
+	$ui->addLabelValueLink('Create new...', NULL, 'GET', $baseUrl.'administrationArticleDatabaseAddUI.php', NULL, $titleBarColorAdministrationArticleDatabase);
 }
 
 echo $ui->getObjectAsJSONString();

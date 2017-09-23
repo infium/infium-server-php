@@ -37,9 +37,10 @@ try{
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';
-	$response['Data'][0]['Action'] = 'Reload';
-	$response['Data'][1]['Action'] = 'MessageFlash';
-	$response['Data'][1]['Message'] = 'Article created #'.$inputVisible['Number'];
+    $response['Data'][0]['Action'] = 'Pop';
+	$response['Data'][1]['Action'] = 'Reload';
+	$response['Data'][2]['Action'] = 'MessageFlash';
+	$response['Data'][2]['Message'] = 'Article created #'.$inputVisible['Number'];
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
