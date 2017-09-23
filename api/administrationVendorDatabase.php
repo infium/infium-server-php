@@ -24,13 +24,29 @@ $ui = new UserInterface();
 
 $ui->setTitle('Vendor');
 
-if (checkUserAccessBoolean('AdministrationVendorDatabase')){
-	$ui->addLabelValueLink('Search', NULL, 'GET', $baseUrl.'administrationVendorDatabaseSearchUI.php', NULL, $titleBarColorAdministrationVendorDatabase);
+$pdo = createPdo();
+
+$resultsActive = dbPrepareExecute($pdo, "SELECT Id, Number, InternalName FROM Vendor WHERE Active=? ORDER BY InternalName ASC", array(True));
+
+if (count($resultsActive) > 0){
+    $ui->addLabelHeader('Active');
 }
 
-if (checkUserAccessBoolean('AdministrationVendorDatabase')){
-	$ui->addLabelValueLink('Create', NULL, 'GET', $baseUrl.'administrationVendorDatabaseCreateUI.php', NULL, $titleBarColorAdministrationVendorDatabase);
+foreach ($resultsActive as $row){
+    $ui->addLabelValueLink($row['Number'].' '.$row['InternalName'], NULL, 'GET', $baseUrl.'administrationVendorDatabaseEditUI.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationVendorDatabase);
 }
+
+$resultsInactive = dbPrepareExecute($pdo, "SELECT Id, Number, InternalName FROM Vendor WHERE Active=? ORDER BY InternalName ASC", array(False));
+
+if (count($resultsInactive) > 0){
+    $ui->addLabelHeader('Inactive');
+}
+
+foreach ($resultsInactive as $row){
+    $ui->addLabelValueLink($row['Number'].' '.$row['InternalName'], NULL, 'GET', $baseUrl.'administrationVendorDatabaseEditUI.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationVendorDatabase);
+}
+
+$ui->addLabelValueLink('Create new...', NULL, 'GET', $baseUrl.'administrationVendorDatabaseCreateUI.php', NULL, $titleBarColorAdministrationVendorDatabase);
 
 echo $ui->getObjectAsJSONString();
 ?>

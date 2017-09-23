@@ -47,9 +47,10 @@ try{
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';
-	$response['Data'][0]['Action'] = 'Reload';
-	$response['Data'][1]['Action'] = 'MessageFlash';
-	$response['Data'][1]['Message'] = 'Vendor created #'.$vendorCreate->getVendorNumber();
+	$response['Data'][0]['Action'] = 'Pop';
+    $response['Data'][1]['Action'] = 'Reload';
+	$response['Data'][2]['Action'] = 'MessageFlash';
+	$response['Data'][2]['Message'] = 'Vendor created #'.$vendorCreate->getVendorNumber();
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
