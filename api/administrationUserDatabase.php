@@ -24,12 +24,20 @@ $ui = new UserInterface();
 
 $ui->setTitle('User');
 
-if (checkUserAccessBoolean('AdministrationUserDatabaseView')){
-	$ui->addLabelValueLink('Change', NULL, 'GET', $baseUrl.'administrationUserDatabaseView.php', NULL, $titleBarColorAdministrationUserDatabase);
+$pdo = createPdo();
+
+$stmt = $pdo->prepare('SELECT Id,Name FROM User ORDER BY Name ASC');
+$stmt->execute(array());
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$ui = new UserInterface();
+
+foreach ($results as $row){
+    $ui->addLabelValueLink($row['Name'], NULL, 'GET', $baseUrl.'administrationUserDatabaseView2.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationUserDatabase);
 }
 
 if (checkUserAccessBoolean('AdministrationUserDatabaseCreate')){
-	$ui->addLabelValueLink('Create', NULL, 'GET', $baseUrl.'administrationUserDatabaseCreateUI.php', NULL, $titleBarColorAdministrationUserDatabase);
+	$ui->addLabelValueLink('Create new...', NULL, 'GET', $baseUrl.'administrationUserDatabaseCreateUI.php', NULL, $titleBarColorAdministrationUserDatabase);
 }
 
 echo $ui->getObjectAsJSONString();

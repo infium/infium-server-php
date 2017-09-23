@@ -35,9 +35,10 @@ try {
 	auditTrailLog($pdo, 'User', $pdo->lastInsertId(), 'INSERT');
 	
 	$response['Response'] = 'LocalActions';
-	$response['Data'][0]['Action'] = 'Reload';
-	$response['Data'][1]['Action'] = 'MessageFlash';
-	$response['Data'][1]['Message'] = 'User "'.$input['Name'].'" created';
+	$response['Data'][0]['Action'] = 'Pop';
+    $response['Data'][1]['Action'] = 'Reload';
+	$response['Data'][2]['Action'] = 'MessageFlash';
+	$response['Data'][2]['Message'] = 'User "'.$input['Name'].'" created';
 
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
