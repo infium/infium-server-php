@@ -35,7 +35,7 @@ $databasePasswd = 'password';
 
 $extendedLogging = true;
 
-$version = '1.1.0';
+$version = '1.2.0';
 
 $titleBarColorCustomer = '#59B750';
 $titleBarColorCustomerInvoice = '#59B750';

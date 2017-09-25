@@ -16,7 +16,7 @@
 
 START TRANSACTION;
 
-SET @databaseVersion = '1.1.0';
+SET @databaseVersion = '1.2.0';
 
 CREATE TABLE `Article` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
