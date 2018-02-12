@@ -85,8 +85,9 @@ try {
 			foreach ($accountsAndSubAccountsBalanceSheet as $row){
 				$amountBalanceSheetAccountAndSubAccountFirstYear = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=? AND SubAccountNumber=?', array($yearBefore, $row['AccountNumber'], $row['SubAccountNumber']));
 				$amountBalanceSheetAccountAndSubAccountSecondYear = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=? AND SubAccountNumber=? AND BookingDate IS NULL', array($year[0]['Year'], $row['AccountNumber'], $row['SubAccountNumber']));
-				if ($amountBalanceSheetAccountAndSubAccountFirstYear[0]['Amount'] != $amountBalanceSheetAccountAndSubAccountSecondYear[0]['Amount']){
-					throw new Exception('The outgoing balance of one or more accounts in '.$yearBefore.' is not equal to the opening balance of the same account in '.$year[0]['Year'].'. Please run the balance carry forward procedure before you close the year.');
+				$difference = $amountBalanceSheetAccountAndSubAccountSecondYear[0]['Amount'] - $amountBalanceSheetAccountAndSubAccountFirstYear[0]['Amount'];
+				if ($difference > 0.001){
+					throw new Exception('The outgoing balance of account '.$row['AccountNumber'].' in '.$yearBefore.' is not equal to the opening balance of the same account in '.$year[0]['Year'].'. The difference is ' . $difference . '. Please run the balance carry forward procedure before you close the year.');
 				}
 			}
 		}
