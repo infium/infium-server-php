@@ -36,8 +36,8 @@ $ui->setTitle($_GET['AccountNumber'].' '.$results[0]['Description'].' '.$_GET['D
 
 $SumResult = 0;
 
-$stmt2 = $pdo->prepare('SELECT Number, BookingDate, Text, Amount, DocumentType, DocumentTypeNumber FROM GeneralLedgerAccountBookingRow WHERE AccountNumber=? AND BookingDate<=? AND BookingDate<=? AND ClearingDate IS NULL ORDER BY BookingDate, Id');
-$stmt2->execute(array($_GET['AccountNumber'], $_GET['Date'], $_GET['Date']));
+$stmt2 = $pdo->prepare('SELECT Number, BookingDate, Text, Amount, DocumentType, DocumentTypeNumber FROM GeneralLedgerAccountBookingRow WHERE AccountNumber=? AND BookingDate<=? AND BookingDate<=? AND (ClearingDate IS NULL OR ClearingDate > ?) ORDER BY BookingDate, Id');
+$stmt2->execute(array($_GET['AccountNumber'], $_GET['Date'], $_GET['Date'], $_GET['Date']));
 $results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($results2 as $row){
