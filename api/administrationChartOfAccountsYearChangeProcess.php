@@ -24,16 +24,16 @@ try {
 	$inputHidden = json_decode(file_get_contents('php://input'), TRUE)['HiddenData'];
 
 	$pdo = createPdo();
-	
+
 	$pdo->exec('START TRANSACTION');
-	
+
 	if (($inputVisible['Status'] != 'Open')&&($inputVisible['Status'] != 'Closed')){
 		throw new Exception('The year must be either open or closed.');
 	}
-	
+
 	if ($inputVisible['Status'] == 'Closed'){
 		$year = dbPrepareExecute($pdo, 'SELECT Year FROM GeneralLedgerYear WHERE Id=?', array($inputHidden['Id']));
-	
+
 		if ($inputVisible['Status'] == 'Closed'){
 			$previousYears = dbPrepareExecute($pdo, 'SELECT Year, Status FROM GeneralLedgerYear WHERE Year<?', array($year[0]['Year']));
 			foreach ($previousYears as $row) {
@@ -42,7 +42,7 @@ try {
 				}
 			}
 		}
-	
+
 		if ($inputVisible['Status'] == 'Open'){
 			$upcomingYears = dbPrepareExecute($pdo, 'SELECT Year, Status FROM GeneralLedgerYear WHERE Year>?', array($year[0]['Year']));
 			foreach ($upcomingYears as $row) {
@@ -51,37 +51,37 @@ try {
 				}
 			}
 		}
-		
+
 		$accountsProfitAndLoss = dbPrepareExecute($pdo, 'SELECT AccountNumber FROM GeneralLedgerAccount WHERE Year=? AND Type=\'PL\'', array($year[0]['Year']));
-	
+
 		$amountProfitAndLoss = 0.0;
 		foreach ($accountsProfitAndLoss as $row){
 			$amountProfitAndLossAccount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=?', array($year[0]['Year'], $row['AccountNumber']));
 			$amountProfitAndLoss += $amountProfitAndLossAccount[0]['Amount'];
 		}
-		
+
 		if (!(bccomp($amountProfitAndLoss, 0.0, 4) === 0)){
 			throw new Exception('The balance in the profit and loss statement must be zero. Please run the balance carry forward procedure before you close the year.');
 		}
-	
+
 		$accountsBalanceSheet = dbPrepareExecute($pdo, 'SELECT AccountNumber FROM GeneralLedgerAccount WHERE Year=? AND Type=\'BS\'', array($year[0]['Year']));
-	
+
 		$amountBalanceSheet = 0;
 		foreach ($accountsBalanceSheet as $row){
 			$amountBalanceSheetAccount = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=?', array($year[0]['Year'], $row['AccountNumber']));
 			$amountBalanceSheet += $amountBalanceSheetAccount[0]['Amount'];
 		}
-	
+
 		if (!(bccomp($amountBalanceSheet, 0.0, 4) === 0)){
 			throw new Exception('The balance in the balance sheet must be zero. Please run the balance carry forward procedure before you close the year.');
 		}
-		
+
 		$yearBefore = $year[0]['Year'] - 1;
 		$accountsBalanceSheet = dbPrepareExecute($pdo, 'SELECT AccountNumber FROM GeneralLedgerAccount WHERE Year=? AND Type=\'BS\'', array($yearBefore));
 
 		foreach ($accountsBalanceSheet as $row1){
 			$accountsAndSubAccountsBalanceSheet = dbPrepareExecute($pdo, 'SELECT DISTINCT AccountNumber, SubAccountNumber FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=?', array($yearBefore, $row1['AccountNumber']));
-			
+
 			foreach ($accountsAndSubAccountsBalanceSheet as $row){
 				$amountBalanceSheetAccountAndSubAccountFirstYear = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=? AND SubAccountNumber=?', array($yearBefore, $row['AccountNumber'], $row['SubAccountNumber']));
 				$amountBalanceSheetAccountAndSubAccountSecondYear = dbPrepareExecute($pdo, 'SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=? AND SubAccountNumber=? AND BookingDate IS NULL', array($year[0]['Year'], $row['AccountNumber'], $row['SubAccountNumber']));
@@ -92,13 +92,13 @@ try {
 			}
 		}
 	}
-	
+
 	dbPrepareExecute($pdo, 'UPDATE GeneralLedgerYear SET Status=? WHERE Id=?', array($inputVisible['Status'], $inputHidden['Id']));
-	
+
 	auditTrailLog($pdo, 'GeneralLedgerYear', $inputHidden['Id'], 'UPDATE');
-	
+
 	$pdo->exec('COMMIT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

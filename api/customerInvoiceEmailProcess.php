@@ -22,15 +22,15 @@ checkUserAccess('CustomerInvoiceEmail');
 
 try {
 	$inputVisible = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
-	
+
 	$pdo = createPdo();
-	
+
 	validateCustomerInvoiceDocumentNumber($pdo, $inputVisible['DocumentNumber']);
-	
+
 	$invoiceHTML = renderCustomerInvoice($inputVisible['DocumentNumber']);
 
 	emailSend($emailFrom, $inputVisible['Email'], 'Invoice #'.$inputVisible['DocumentNumber'], 'This e-mail has been HTML formatted. Please use an e-mail client that supports HTML.', $invoiceHTML, 'Invoice_'.$inputVisible['DocumentNumber'].'.html');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

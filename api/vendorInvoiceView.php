@@ -32,7 +32,7 @@ $ui->setTitle('View');
 
 foreach ($results as $row){
 	$amount = decimalFormat($row['AmountGross']);
-	
+
 	$ui->addLabelValueLink('Invoice #'.$row['Number'], $amount, 'GET',$baseUrl.'vendorInvoiceViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorVendorInvoice);
 }
 

@@ -25,9 +25,9 @@ try{
 	$inputVisible = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
 
 	$pdo = createPdo();
-	
+
 	$pdo->exec('START TRANSACTION');
-	
+
 	$vendorCreate = new VendorCreate();
 	$vendorCreate->setInternalName($inputVisible['InternalName']);
 	$vendorCreate->setBankAccount($inputVisible['BankAccount']);
@@ -43,7 +43,7 @@ try{
 	$vendorCreate->setBillFromAddressZipOrPostalCode($inputVisible['BillFromAddressZipOrPostalCode']);
 	$vendorCreate->setBillFromAddressCountry($inputVisible['BillFromAddressCountry']);
 	$vendorCreate->create($pdo);
-	
+
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';

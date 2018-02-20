@@ -32,12 +32,12 @@ $ui->setTitle('View');
 
 foreach ($results as $row){
 	$amount = decimalFormat($row['AmountGross']);
-	
-	$ui->addLabelValueLink('Invoice #'.$row['Number'], $amount, 'GET',$baseUrl.'customerInvoiceViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorCustomerInvoice);	
+
+	$ui->addLabelValueLink('Invoice #'.$row['Number'], $amount, 'GET',$baseUrl.'customerInvoiceViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorCustomerInvoice);
 }
 
 if (count($results) == 0){
-	$ui->addLabelValueLink('No documents exist yet', NULL, NULL, NULL, NULL, NULL);	
+	$ui->addLabelValueLink('No documents exist yet', NULL, NULL, NULL, NULL, NULL);
 }
 
 echo $ui->getObjectAsJSONString();

@@ -47,10 +47,10 @@ $inputVisible = json_decode(file_get_contents('php://input'), TRUE)['VisibleData
 foreach ($inputVisible as $key => $value){
 	if ($value == True){
 		$index = substr($key, 5);
-		
+
 		$newRow['PaymentReference'] = $inputHidden['Payment'][$index]['ClearingReference'];
 		$newRow['Amount'] = $inputHidden['Payment'][$index]['Amount'];
-		
+
 		$visibleData['Row'][] = $newRow;
 	}
 }

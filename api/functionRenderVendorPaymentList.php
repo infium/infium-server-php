@@ -29,13 +29,13 @@ function renderVendorPaymentList($documentNumber){
 	$stmt2 = $pdo->prepare('SELECT BankAccount, InternalName, PaymentReference, DueDate, Amount FROM VendorPaymentListRow WHERE ParentId=?');
 	$stmt2->execute(array($results[0]['Id']));
 	$results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-	
+
 	$currencyResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('Currency'));
 	$currency = $currencyResult[0]['Value'];
 
 	$documentFootResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('DocumentFoot'));
 	$documentFoot = $documentFootResult[0]['Value'];
-	
+
 	$output = '<!DOCTYPE html>
 	<html>
 	<head>
@@ -50,7 +50,7 @@ function renderVendorPaymentList($documentNumber){
 		font-size: 11.5pt;
 	}
 
-	td { 
+	td {
 	    padding: 3px;
 	}
 
@@ -91,9 +91,9 @@ function renderVendorPaymentList($documentNumber){
 
 	foreach ($results2 as $row){
 		$output .= '<tr><td>'.$row['DueDate'].'</td><td>'.$row['BankAccount'].'</td><td>'.$row['InternalName'].'</td><td>'.$row['PaymentReference'].'</td><td style="text-align: right;">'.decimalFormat($row['Amount'])."</td></tr>\n";
-	
+
 	}
-	
+
 	$output .= '
 
 	</table>
@@ -121,9 +121,9 @@ function renderVendorPaymentList($documentNumber){
 
 	</body>
 	</html>';
-	
+
 	$pdo->exec('ROLLBACK');
-	
+
 	return $output;
 }
 ?>

@@ -39,7 +39,7 @@ foreach ($results as $row){
 	$newValue['Value'] = $row['Number'];
 	$newValue['Description'] = $row['Number'] . ' ' . $row['InternalName'];
 
-	$dataToReturn['Data']['Result'][] = $newValue;	
+	$dataToReturn['Data']['Result'][] = $newValue;
 }
 
 echo json_encode($dataToReturn,JSON_PRETTY_PRINT);

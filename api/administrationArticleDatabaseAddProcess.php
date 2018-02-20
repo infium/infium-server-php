@@ -27,13 +27,13 @@ try{
 	$pdo = createPdo();
 
 	$pdo->exec('START TRANSACTION');
-	
+
 	$articleCreate = new ArticleCreate();
 	$articleCreate->setNumber($inputVisible['Number']);
 	$articleCreate->setDescription($inputVisible['Description']);
 	$articleCreate->setTaxGroup($inputVisible['TaxGroup']);
 	$articleCreate->create($pdo);
-		
+
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';

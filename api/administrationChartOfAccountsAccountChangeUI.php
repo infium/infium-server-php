@@ -54,7 +54,7 @@ if ($account[0]['Type'] == 'BS'){
 $ui->addLabelTrueFalse('ShowInVendorInvoice','Show in vendor invoice');
 
 if ($account[0]['ShowInVendorInvoice'] == 1){
-	$valueVisibleData['ShowInVendorInvoice'] = True;	
+	$valueVisibleData['ShowInVendorInvoice'] = True;
 }else{
 	$valueVisibleData['ShowInVendorInvoice'] = False;
 }

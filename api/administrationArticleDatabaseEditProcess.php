@@ -28,9 +28,9 @@ try{
 
 	$pdo->exec('START TRANSACTION');
 	dbPrepareExecute($pdo, 'UPDATE Article SET Active=?, Description=?, TaxGroup=? WHERE Id=?', array($inputVisible['Active'], $inputVisible['Description'], $inputVisible['TaxGroup'], $inputHidden['Id']));
-	
+
 	auditTrailLog($pdo, 'Article', $inputHidden['Id'], 'UPDATE');
-	
+
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';

@@ -29,22 +29,22 @@ try {
 	validateVendorPaymentListDocumentNumber($pdo, $inputVisible['DocumentNumber']);
 
 	$pdo->exec('START TRANSACTION');
-	
+
 	$previousDoc = dbPrepareExecute($pdo, 'SELECT Id FROM VendorPaymentList WHERE Number=?', array($inputVisible['DocumentNumber']));
-	
+
 	$previousDocRows = dbPrepareExecute($pdo, 'SELECT Id, PreviousRowId, Amount FROM VendorPaymentListRow WHERE ParentId=?', array($previousDoc[0]['Id']));
-	
+
 	$vendorPaymentList = new VendorPaymentList();
-	
+
 	$vendorPaymentList->setBookingDate($inputVisible['BookingDate']);
-	
+
 	foreach ($previousDocRows as $row){
 		$vendorPaymentList->addRow($row['PreviousRowId'], $row['Amount'] * -1, $row['Id']);
 	}
 
 	$vendorPaymentList->validateAndWriteToDatabase($pdo);
 	$pdo->exec('COMMIT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'MessageFlash';

@@ -32,12 +32,12 @@ $ui->setTitle('View');
 
 foreach ($results as $row){
 	$amount = decimalFormat($row['Amount']);
-	
+
 	$ui->addLabelValueLink('Payment list #'.$row['Number'], $amount, 'GET', $baseUrl.'vendorPaymentListViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorVendorPaymentList);
 }
 
 if (count($results) == 0){
-	$ui->addLabelValueLink('No documents exist yet');	
+	$ui->addLabelValueLink('No documents exist yet');
 }
 
 echo $ui->getObjectAsJSONString();

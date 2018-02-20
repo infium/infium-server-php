@@ -29,14 +29,14 @@ function renderVendorInvoice($documentNumber){
 	$stmt2 = $pdo->prepare('SELECT Account, Description, TaxPercent, AmountNet, AmountTax, AmountGross FROM VendorInvoiceRow WHERE ParentId=?');
 	$stmt2->execute(array($results[0]['Id']));
 	$results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-	
+
 	$currencyResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('Currency'));
 	$currency = $currencyResult[0]['Value'];
 
 	$documentFootResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('DocumentFoot'));
 	$documentFoot = $documentFootResult[0]['Value'];
-	
-	
+
+
 	$output = '<!DOCTYPE html>
 	<html>
 	<head>
@@ -51,7 +51,7 @@ function renderVendorInvoice($documentNumber){
 		font-size: 11.5pt;
 	}
 
-	td { 
+	td {
 	    padding: 3px;
 	}
 
@@ -104,11 +104,11 @@ function renderVendorInvoice($documentNumber){
 	if ($results[0]['BillFromAddressStateOrProvince'] != ''){$output .= $results[0]['BillFromAddressStateOrProvince'].'<br/>';}
 	if ($results[0]['BillFromAddressZipOrPostalCode'] != ''){$output .= $results[0]['BillFromAddressZipOrPostalCode'].'<br/>';}
 	if ($results[0]['BillFromAddressCountry'] != ''){$output .= $results[0]['BillFromAddressCountry'].'<br/>';}
-	
+
 	$output .= '
 	</td></tr>
 	</table>
-	
+
 	<div style="height: 30px;"></div>
 
 	<table style="width: 100%;">
@@ -119,11 +119,11 @@ function renderVendorInvoice($documentNumber){
 			$stmt3 = $pdo->prepare('SELECT Description FROM GeneralLedgerAccount WHERE Year=? AND AccountNumber=?');
 			$stmt3->execute(array(substr($results[0]['BookingDate'], 0, 4), $row['Account']));
 			$results3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-	
+
 			$output .= '<tr><td>'.$row['Account'].'</td><td>'.$results3[0]['Description'].'</td><td style="text-align: right;">'.decimalFormat($row['AmountNet'])."</td></tr>\n";
 		}
 	}
-	
+
 	$output .= '
 
 	</table>
@@ -153,9 +153,9 @@ function renderVendorInvoice($documentNumber){
 
 	</body>
 	</html>';
-	
+
 	$pdo->exec('ROLLBACK;');
-	
+
 	return $output;
 }
 ?>

@@ -52,7 +52,7 @@ $ui->addLabelHeader('Automatic e-mail');
 
 $ui->addLabelTrueFalse('EmailInvoice','Invoice');
 if ($results[0]['EmailInvoice'] == 1){
-	$valueVisibleData['EmailInvoice'] = True;	
+	$valueVisibleData['EmailInvoice'] = True;
 }else{
 	$valueVisibleData['EmailInvoice'] = False;
 }
@@ -114,7 +114,7 @@ $ui->addLabelHeader('Other');
 $ui->addLabelTrueFalse('Active','Active');
 
 if ($results[0]['Active'] == 1){
-	$valueVisibleData['Active'] = True;	
+	$valueVisibleData['Active'] = True;
 }else{
 	$valueVisibleData['Active'] = False;
 }

@@ -41,9 +41,9 @@ class CustomerCreate
 	private $shipToAddressStateOrProvince = NULL;
 	private $shipToAddressZipOrPostalCode = NULL;
 	private $shipToAddressCountry = NULL;
-	
+
 	private $customerNumber = NULL;
-	
+
 	public function setInternalName($internalName)
 	{
 		$this->internalName = $internalName;
@@ -53,27 +53,27 @@ class CustomerCreate
 	{
 		$this->email = $email;
 	}
-	
+
 	public function setEmailInvoice($emailInvoice)
 	{
 		$this->emailInvoice = $emailInvoice;
 	}
-	
+
 	public function setTaxGroup($taxGroup)
 	{
 		$this->taxGroup = $taxGroup;
 	}
-	
+
 	public function setTaxNumber($taxNumber)
 	{
 		$this->taxNumber = $taxNumber;
 	}
-	
+
 	public function setPaymentTerms($paymentTerms)
 	{
 		$this->paymentTerms = $paymentTerms;
 	}
-	
+
 	public function setBillToAddressLine1($billToAddressLine1)
 	{
 		$this->billToAddressLine1 = $billToAddressLine1;
@@ -93,32 +93,32 @@ class CustomerCreate
 	{
 		$this->billToAddressLine4 = $billToAddressLine4;
 	}
-	
+
 	public function setBillToAddressCity($billToAddressCity)
 	{
 		$this->billToAddressCity = $billToAddressCity;
 	}
-	
+
 	public function setBillToAddressStateOrProvince($billToAddressStateOrProvince)
 	{
 		$this->billToAddressStateOrProvince = $billToAddressStateOrProvince;
 	}
-	
+
 	public function setBillToAddressZipOrPostalCode($billToAddressZipOrPostalCode)
 	{
 		$this->billToAddressZipOrPostalCode = $billToAddressZipOrPostalCode;
 	}
-	
+
 	public function setBillToAddressCountry($billToAddressCountry)
 	{
 		$this->billToAddressCountry = $billToAddressCountry;
 	}
-	
+
 	public function setShipToAddressLine1($shipToAddressLine1)
 	{
 		$this->shipToAddressLine1 = $shipToAddressLine1;
 	}
-	
+
 	public function setShipToAddressLine2($shipToAddressLine2)
 	{
 		$this->shipToAddressLine2 = $shipToAddressLine2;
@@ -138,31 +138,31 @@ class CustomerCreate
 	{
 		$this->shipToAddressCity = $shipToAddressCity;
 	}
-	
+
 	public function setShipToAddressStateOrProvince($shipToAddressStateOrProvince)
 	{
 		$this->shipToAddressStateOrProvince = $shipToAddressStateOrProvince;
 	}
-	
+
 	public function setShipToAddressZipOrPostalCode($shipToAddressZipOrPostalCode)
 	{
 		$this->shipToAddressZipOrPostalCode = $shipToAddressZipOrPostalCode;
 	}
-	
+
 	public function setShipToAddressCountry($shipToAddressCountry)
 	{
 		$this->shipToAddressCountry = $shipToAddressCountry;
 	}
-	
+
 	public function create($pdo)
 	{
 		$this->customerNumber = nextDocumentNumber($pdo, 'Customer');
-		
+
 		dbPrepareExecute($pdo, 'INSERT INTO Customer (Active, Number, InternalName, Email, EmailInvoice, TaxGroup, TaxNumber, PaymentTerms, BillToAddressLine1, BillToAddressLine2, BillToAddressLine3, BillToAddressLine4, BillToAddressCity, BillToAddressStateOrProvince, BillToAddressZipOrPostalCode, BillToAddressCountry, ShipToAddressLine1, ShipToAddressLine2, ShipToAddressLine3, ShipToAddressLine4, ShipToAddressCity, ShipToAddressStateOrProvince, ShipToAddressZipOrPostalCode, ShipToAddressCountry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(1, $this->customerNumber, $this->internalName, $this->email, $this->emailInvoice, $this->taxGroup, $this->taxNumber, $this->paymentTerms, $this->billToAddressLine1, $this->billToAddressLine2, $this->billToAddressLine3, $this->billToAddressLine4, $this->billToAddressCity, $this->billToAddressStateOrProvince, $this->billToAddressZipOrPostalCode, $this->billToAddressCountry, $this->shipToAddressLine1, $this->shipToAddressLine2, $this->shipToAddressLine3, $this->shipToAddressLine4, $this->shipToAddressCity, $this->shipToAddressStateOrProvince, $this->shipToAddressZipOrPostalCode, $this->shipToAddressCountry));
-		
+
 		auditTrailLog($pdo, 'Customer', $pdo->lastInsertId(), 'INSERT');
 	}
-	
+
 	public function getCustomerNumber()
 	{
 		return $this->customerNumber;

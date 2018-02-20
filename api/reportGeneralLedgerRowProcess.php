@@ -39,18 +39,18 @@ switch ($header[0]['DocumentType']) {
 	case 'CustomerInvoice':
 		$ui->addLabelValueLink('Origin', 'Customer invoice #'.$header[0]['DocumentTypeNumber'], 'GET', $baseUrl.'customerInvoiceViewDocument.php?Number='.$header[0]['DocumentTypeNumber'], NULL, $titleBarColorReportGeneralLedger);
 		break;
-	
+
 	case 'CustomerPayment':
 		$ui->addLabelValueLink('Origin', 'Customer payment #'.$header[0]['DocumentTypeNumber'], 'GET', $baseUrl.'customerPaymentViewDocument.php?Number='.$header[0]['DocumentTypeNumber'], NULL, $titleBarColorReportGeneralLedger);
 		break;
-	
+
 	case 'VendorInvoice':
 		$ui->addLabelValueLink('Origin', 'Vendor invoice #'.$header[0]['DocumentTypeNumber'], 'GET', $baseUrl.'vendorInvoiceViewDocument.php?Number='.$header[0]['DocumentTypeNumber'], NULL, $titleBarColorReportGeneralLedger);
 		break;
-	
+
 	case 'VendorPaymentCompleted':
 		$ui->addLabelValueLink('Origin', 'Vendor payment #'.$header[0]['DocumentTypeNumber'], 'GET', $baseUrl.'vendorPaymentCompletedViewDocument.php?Number='.$header[0]['DocumentTypeNumber'], NULL, $titleBarColorReportGeneralLedger);
-		break;    
+		break;
 }
 
 $rows = dbPrepareExecute($pdo, 'SELECT AccountNumber, Debit, Credit FROM GeneralLedgerAccountBookingRow WHERE Number=? ORDER BY Id', array($_GET['Number']));
@@ -58,7 +58,7 @@ $rows = dbPrepareExecute($pdo, 'SELECT AccountNumber, Debit, Credit FROM General
 $i = 0;
 
 foreach ($rows as $row){
-	
+
 	$accountDescription = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE AccountNumber=? AND Year=? ORDER BY Year DESC', array($row['AccountNumber'], $_GET['Year']));
 	$i++;
 	$ui->addLabelHeader('Row '.$i);

@@ -21,29 +21,29 @@ checkUserAccess('AdministrationChartOfAccountsReportTemplateChange');
 
 try {
 	$pdo = createPdo();
-	
+
 	$pdo->exec('START TRANSACTION');
-	
+
 	$reportTemplateData = dbPrepareExecute($pdo, 'SELECT Year FROM ReportTemplate WHERE Id=?', array($_GET['Id']));
-	
+
 	$yearOpen = dbPrepareExecute($pdo, 'SELECT Status FROM GeneralLedgerYear WHERE Year=?', array($reportTemplateData[0]['Year']));
-	
+
 	if ($yearOpen[0]['Status'] != 'Open'){
 		throw new Exception('The year '.$reportTemplateData[0]['Year'].' is currently not open.');
 	}
-	
+
 	$existingSubLevels = dbPrepareExecute($pdo, 'SELECT COUNT(*) as ExistingSubLevels FROM ReportTemplateRow WHERE ParentId=? AND ParentSection=?', array($_GET['Id'], $_GET['ThisId']));
 
 	if ($existingSubLevels[0]['ExistingSubLevels'] > 0){
 		throw new Exception('You first need to delete sublevel sections and accounts. Delete was cancelled.');
 	}
-		
+
 	dbPrepareExecute($pdo, 'DELETE FROM ReportTemplateRow WHERE Id=?', array($_GET['ThisId']));
-	
+
 	auditTrailLog($pdo, 'ReportTemplateRow', $_GET['ThisId'], 'DELETE');
-	
+
 	$pdo->exec('COMMIT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

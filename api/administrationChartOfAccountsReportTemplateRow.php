@@ -47,19 +47,19 @@ function processSection($pdo, $ui, $parentId, $parentSection, $accountYear){
 	foreach ($itemsInSection as $row){
 		if ($row['SectionDescription'] != NULL){
 			$level++;
-						
+
 			$ui->addLabelValueLink($row['SectionDescription'].' ('.$row['Order'].')', NULL, 'POST', $baseUrl.'administrationChartOfAccountsReportTemplateRowDeleteProcess.php?Id='.$_GET['Id'].'&ThisId='.$row['Id'], NULL, $titleBarColorAdministrationChartOfAccounts, $level - 1);
-			
+
 			processSection($pdo, $ui, $parentId, $row['Id'], $accountYear);
-			
+
 			$ui->addLabelValueLink('Create new row in "'.$row['SectionDescription'].'"...', NULL, 'GET', $baseUrl.'administrationChartOfAccountsReportTemplateRowCreateUI.php?Id='.$_GET['Id'].'&ParentSection='.$row['Id'], NULL, $titleBarColorAdministrationChartOfAccounts, $level);
-			
+
 			$level--;
 		}
-		
+
 		if ($row['AccountNumber'] != NULL){
 			$accountDescription = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE Year=? AND AccountNumber=?', array($accountYear, $row['AccountNumber']));
-			
+
 			$ui->addLabelValueLink($row['AccountNumber'].' '.$accountDescription[0]['Description'].' ('.$row['Order'].')', NULL, 'POST', $baseUrl.'administrationChartOfAccountsReportTemplateRowDeleteProcess.php?Id='.$_GET['Id'].'&ThisId='.$row['Id'], NULL, $titleBarColorAdministrationChartOfAccounts, $level);
 		}
 	}

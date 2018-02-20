@@ -27,7 +27,7 @@ $pdo = createPdo();
 if ($input['Active'] == True){
 	$active = True;
 }else{
-	$active = -1;	
+	$active = -1;
 }
 
 if ($input['Reversal'] == True){
@@ -54,7 +54,7 @@ foreach ($results as $row){
 }
 
 if (count($results) == 0){
-	$ui->addLabelValueLink('No documents match the search');	
+	$ui->addLabelValueLink('No documents match the search');
 }
 
 echo $ui->getObjectAsJSONString();

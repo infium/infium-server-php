@@ -29,7 +29,7 @@ $companyName = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property
 if ($companyName[0]['Value'] != ''){
 	$ui->setTitle($companyName[0]['Value']);
 }else{
-	$ui->setTitle('Menu');	
+	$ui->setTitle('Menu');
 }
 
 $noAccess = True;
@@ -59,7 +59,7 @@ if (checkUserAccessBoolean('AdministrationArticleDatabase')||checkUserAccessBool
 }
 
 if ($noAccess == True){
-	$ui->addLabelValueLink('You have no access');	
+	$ui->addLabelValueLink('You have no access');
 }
 
 echo $ui->getObjectAsJSONString();

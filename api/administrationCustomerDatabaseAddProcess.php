@@ -27,7 +27,7 @@ try{
 	$pdo = createPdo();
 
 	$pdo->exec('START TRANSACTION');
-	
+
 	$customerCreate = new CustomerCreate();
 	$customerCreate->setInternalName($inputVisible['InternalName']);
 	$customerCreate->setEmail($inputVisible['Email']);
@@ -52,9 +52,9 @@ try{
 	$customerCreate->setShipToAddressZipOrPostalCode($inputVisible['ShipToAddressZipOrPostalCode']);
 	$customerCreate->setShipToAddressCountry($inputVisible['ShipToAddressCountry']);
 	$customerCreate->create($pdo);
-	
+
 	$pdo->exec('COMMIT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

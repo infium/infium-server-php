@@ -24,13 +24,13 @@ try {
 	$input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
 
 	validateDate($input['Date']);
-	
+
 	$vendorPaymentCompleted = new VendorPaymentCompleted();
-	
+
 	$vendorPaymentCompleted->setDate($input['Date']);
-	
+
 	$pdo = createPdo();
-	
+
 	$a = 0;
 	foreach ($input as $field => $value){
 		if (($field != 'Date')&&($value == True)){
@@ -38,17 +38,17 @@ try {
 			$stmt = $pdo->prepare('SELECT PreviousRowId, AmountRemaining FROM VendorPaymentListRow WHERE Id=?');
 			$stmt->execute(array($field));
 			$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-						
-			$vendorPaymentCompleted->addRow($field,$results[0]['AmountRemaining']);		
-			
+
+			$vendorPaymentCompleted->addRow($field,$results[0]['AmountRemaining']);
+
 			$a++;
 		}
 	}
-	
+
 	if ($a == 0){
 		throw new Exception('Document contains no rows.');
 	}
-	
+
 	$pdo->exec('START TRANSACTION');
 	$vendorPaymentCompleted->validateAndWriteToDatabase($pdo);
 	$pdo->exec('COMMIT');
@@ -62,7 +62,7 @@ try {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
 	$response['Data'][0]['Message'] = 'The following error occurred: ' . $e->getMessage();
-	
+
 }
 
 header('Content-type: application/json');

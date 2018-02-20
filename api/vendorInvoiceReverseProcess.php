@@ -21,21 +21,21 @@ require('classVendorInvoiceReverse.php');
 checkUserAccess('VendorInvoiceReverse');
 
 try {
-	$inputVisible = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];	
-	
+	$inputVisible = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
+
 	$pdo = createPdo();
-	
+
 	validateDate($inputVisible['BookingDate']);
 	validateVendorInvoiceDocumentNumber($pdo, $inputVisible['DocumentNumber']);
-	
+
 	$pdo->exec("START TRANSACTION;");
-	
+
 	$vendorInvoiceReverse = new VendorInvoiceReverse();
-	
+
 	$newDocumentNumberInvoice = $vendorInvoiceReverse->reverse($pdo, $inputVisible['BookingDate'], $inputVisible['DocumentNumber']);
-	
+
 	$pdo->exec("COMMIT;");
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

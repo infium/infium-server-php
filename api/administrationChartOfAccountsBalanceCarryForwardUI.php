@@ -35,16 +35,16 @@ if ($numYears > 1){
 	$ui->setMethod('POST');
 	$ui->setUrl($baseUrl.'administrationChartOfAccountsBalanceCarryForwardProcess.php');
 	$ui->setButtonLabel('Create');
-	
+
 	$ui->addSearchSelection('Period','Period',$baseUrl.'administrationChartOfAccountsBalanceCarryForwardPeriodSearchSelection.php');
-	
+
 	$valueVisibleData['Period'] = $years[$numYears-2]['Year'].'-'.$years[$numYears-1]['Year'];
 	$valueVisibleDataDescription['Period'] = 'Copy from '.$years[$numYears-2]['Year'].' to '.$years[$numYears-1]['Year'];
-	
+
 	$ui->setVisibleData($valueVisibleData);
 	$ui->setVisibleDataDescription($valueVisibleDataDescription);
-}else{	
-	$ui->addLabelValueLink('Only one year exists');	
+}else{
+	$ui->addLabelValueLink('Only one year exists');
 }
 
 echo $ui->getObjectAsJSONString();

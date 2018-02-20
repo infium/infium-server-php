@@ -47,7 +47,7 @@ foreach($results as $row){
 	$stmt2 = $pdo->prepare('SELECT Id, DueDate, InternalName, PaymentReference, VendorId, AmountGross FROM VendorInvoice WHERE Id=?');
 	$stmt2->execute(array($row['PreviousRowId']));
 	$results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-	
+
 	$ui->addLabelTrueFalse($row['Id'],"Vendor: ".$results2[0]['InternalName']."\nInvoice number: ".$results2[0]['PaymentReference']."\nAmount: ".decimalFormat($row['AmountRemaining']).' '.$currency."\nDueDate: ".$results2[0]['DueDate']);
 	$value[$row['Id']] = False;
 }

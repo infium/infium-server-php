@@ -24,20 +24,20 @@ try {
 	$input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
 
 	$pdo = createPdo();
-	
+
 	validateDate($input['Date']);
-	
+
 	$a = 0;
 	foreach ($input['Row'] as $row){
 		if (($row['PaymentReference'] != '')||($row['Amount'] != '')){
 			if ($row['PaymentReference'] == ''){
 				throw new Exception('A payment reference needs to be supplied.');
-			}			
+			}
 			validateNumber($row['Amount']);
 			$a++;
 		}
 	}
-	
+
 	if ($a == 0){
 		throw new Exception('Document contains no rows.');
 	}
@@ -50,10 +50,10 @@ try {
 
 	foreach ($input['Row'] as $customerPaymentRow){
 		if ($customerPaymentRow['Amount'] != ''){
-			$customerPayment->addRow($customerPaymentRow['Amount'],$customerPaymentRow['PaymentReference']);		
+			$customerPayment->addRow($customerPaymentRow['Amount'],$customerPaymentRow['PaymentReference']);
 		}
 	}
-	
+
 	$pdo->exec('START TRANSACTION');
 	$customerPayment->validateAndWriteToDatabase($pdo);
 	$pdo->exec('COMMIT');
@@ -68,7 +68,7 @@ try {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
 	$response['Data'][0]['Message'] = 'The following error occurred: ' . $e->getMessage();
-	
+
 }
 
 header('Content-type: application/json');

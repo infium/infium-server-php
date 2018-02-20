@@ -29,7 +29,7 @@ if (checkUserAccessBoolean('AdministrationChartOfAccountsReportTemplateChange'))
 	$reportTemplates = dbPrepareExecute($pdo, 'SELECT Id, Year, Type, Description FROM ReportTemplate ORDER BY Year ASC, Type ASC, Description ASC', array());
 
 	foreach ($reportTemplates as $row){
-		
+
 		if ($row['Type'] == 'BS'){
 			$reportType = 'Balance sheet';
 		}
@@ -37,7 +37,7 @@ if (checkUserAccessBoolean('AdministrationChartOfAccountsReportTemplateChange'))
 		if ($row['Type'] == 'PL'){
 			$reportType = 'Profit and loss statement';
 		}
-		
+
 		$ui->addLabelValueLink($row['Year'].' - '.$reportType.' - '.$row['Description'], NULL, 'GET', $baseUrl.'administrationChartOfAccountsReportTemplateRow.php?Id='.$row['Id'], NULL, $titleBarColorAdministrationChartOfAccounts);
 	}
 }

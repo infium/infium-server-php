@@ -45,7 +45,7 @@ foreach ($results as $row){
 	if ($row['AccountNumber'] != $lastAccount){
 		$newValue['Value'] = $row['AccountNumber'];
 		$newValue['Description'] = $row['AccountNumber'] . ' ' . $row['Description'];
-		
+
 		$dataToReturn['Data']['Result'][] = $newValue;
 	}
 	$lastAccount = $row['AccountNumber'];
@@ -54,14 +54,14 @@ foreach ($results as $row){
 foreach ($customers as $row){
 	$newValue['Value'] = 'C-'.$row['Number'];
 	$newValue['Description'] = 'C-' . $row['Number'] . ' ' . $row['InternalName'];
-	
+
 	$dataToReturn['Data']['Result'][] = $newValue;
 }
 
 foreach ($vendors as $row){
 	$newValue['Value'] = 'V-'.$row['Number'];
 	$newValue['Description'] = 'V-' . $row['Number'] . ' ' . $row['InternalName'];
-	
+
 	$dataToReturn['Data']['Result'][] = $newValue;
 }
 

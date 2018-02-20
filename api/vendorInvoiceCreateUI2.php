@@ -43,9 +43,9 @@ try{
 	}
 
 	$ui = new UserInterface();
-	
+
 	$results = dbPrepareExecute($pdo, 'SELECT InternalName, BankAccount, TaxGroup FROM Vendor WHERE Number=?', array($input['Vendor']));
-	
+
 	$ui->setTitle('Invoice');
 	$ui->setWindow('Same');
 	$ui->setMethod('POST');
@@ -75,20 +75,20 @@ try{
 	foreach ($input['Row'] as $row){
 		$iPlusOne = $i + 1;
 		if (($input['Row'][$i]['Account'] != '')&&($input['Row'][$i]['Amount'] != '')){
-			
+
 			$taxInclusion = substr($input['Row'][$i]['Tax'], 0, 8);
 			$taxGroup = substr($input['Row'][$i]['Tax'], 9);
-			
+
 			$ui->addLabelHeader('Row '.$iPlusOne);
-			
+
 			$results2 = dbPrepareExecute($pdo, 'SELECT Description FROM GeneralLedgerAccount WHERE (AccountNumber=? AND Year=?)', array($input['Row'][$i]['Account'],substr($input['BookingDate'], 0, 4)));
-			
+
 			$tax = dbPrepareExecute($pdo, 'SELECT TaxPercent, AccountTaxOutput, AccountTaxInput FROM GeneralLedgerAccountDeterminationInvoiceRow WHERE Type=? AND TaxGroupCustomerOrVendor=? AND TaxGroupArticleOrAccount=? AND FromDate<=? AND ToDate>=?', array('Buy', $results[0]['TaxGroup'], $taxGroup, $input['BookingDate'], $input['BookingDate']));
-			
+
 			if (count($tax) != 1){
 				throw new Exception('No tax rules created that match your booking. Please contact the support.');
 			}
-			
+
 			$ui->addLabelValue('Account:', $input['Row'][$i]['Account'].' '.$results2[0]['Description']);
 			$ui->addLabelValue('Amount:', decimalFormat($input['Row'][$i]['Amount']));
 			$hiddenData['Row'][$i]['Account'] = $input['Row'][$i]['Account'];
@@ -121,16 +121,16 @@ try{
 	$ui->addLabelValue("Net amount:", decimalFormat($documentAmountNet));
 	$ui->addLabelValue("Tax:", decimalFormat($documentAmountTax));
 	$ui->addLabelValue("Gross amount:", decimalFormat($documentAmountGross));
-	
+
 	$ui->setHiddenData($hiddenData);
-	
+
 	echo $ui->getObjectAsJSONString();
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'MessageFlash';
 	$response['Data'][1]['Message'] = 'The following error occurred: ' . $e->getMessage();
-	
+
 	header('Content-type: application/json');
 	echo json_encode($response,JSON_PRETTY_PRINT);
 }

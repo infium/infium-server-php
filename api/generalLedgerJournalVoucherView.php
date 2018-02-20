@@ -31,11 +31,11 @@ $ui = new UserInterface();
 $ui->setTitle('View');
 
 foreach ($results as $row){
-	$ui->addLabelValueLink('Journal voucher #'.$row['Number'], NULL, 'GET',$baseUrl.'generalLedgerJournalVoucherViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorGeneralLedgerJournalVoucher);	
+	$ui->addLabelValueLink('Journal voucher #'.$row['Number'], NULL, 'GET',$baseUrl.'generalLedgerJournalVoucherViewDocument.php?Number='.$row['Number'], NULL, $titleBarColorGeneralLedgerJournalVoucher);
 }
 
 if (count($results) == 0){
-	$ui->addLabelValueLink('No documents exist yet');	
+	$ui->addLabelValueLink('No documents exist yet');
 }
 
 echo $ui->getObjectAsJSONString();

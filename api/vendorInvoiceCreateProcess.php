@@ -26,22 +26,22 @@ try {
 	$pdo = createPdo();
 
 	$pdo->exec('START TRANSACTION');
-	
+
 	$vendorInvoice = new VendorInvoice();
 	$vendorInvoice->setBookingDate($input['BookingDate']);
 	$vendorInvoice->setDate($input['InvoiceDate']);
 	$vendorInvoice->setPaymentReference($input['VendorReference']);
 	$vendorInvoice->setVendorNumber($input['Vendor']);
 	$vendorInvoice->setBankAccount($input['BankAccount']);
-	
+
 	foreach ($input['Row'] as $row){
 		$vendorInvoice->addRow($row['Account'], $row['Tax'], $row['Amount']);
 	}
-	
+
 	$vendorInvoice->validateAndWriteToDatabase($pdo);
-	
+
 	$pdo->exec('COMMIT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'Reload';

@@ -40,7 +40,7 @@ $stmt = $pdo->prepare('SELECT Id, DueDate, InternalName, PaymentReference, Vendo
 $stmt->execute(array());
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach($results as $row){	
+foreach($results as $row){
 	$ui->addLabelTrueFalse('Row'.$row['Id'], "Vendor: ".$row['InternalName']."\nInvoice number: ".$row['PaymentReference']."\nAmount: ".decimalFormat($row['AmountGrossRemaining']).' '.$currency."\nDueDate: ".$row['DueDate']);
 	$value['Row'.$row['Id']] = False;
 }

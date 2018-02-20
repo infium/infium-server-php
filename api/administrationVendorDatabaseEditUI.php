@@ -79,7 +79,7 @@ $ui->addLabelHeader('');
 $ui->addLabelTrueFalse('Active','Active');
 
 if ($results[0]['Active'] == 1){
-	$valueVisibleData['Active'] = True;	
+	$valueVisibleData['Active'] = True;
 }else{
 	$valueVisibleData['Active'] = False;
 }

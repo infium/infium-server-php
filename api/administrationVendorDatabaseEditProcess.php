@@ -28,9 +28,9 @@ try{
 
 	$pdo->exec('START TRANSACTION');
 	dbPrepareExecute($pdo, 'UPDATE Vendor SET Active=?, InternalName=?, BankAccount=?, Email=?, TaxGroup=?, BillFromAddressLine1=?, BillFromAddressLine2=?, BillFromAddressLine3=?, BillFromAddressLine4=?, BillFromAddressCity=?, BillFromAddressStateOrProvince=?, BillFromAddressZipOrPostalCode=?, BillFromAddressCountry=? WHERE Id=?', array($inputVisible['Active'], $inputVisible['InternalName'], $inputVisible['BankAccount'], $inputVisible['Email'], $inputVisible['TaxGroup'], $inputVisible['BillFromAddressLine1'], $inputVisible['BillFromAddressLine2'], $inputVisible['BillFromAddressLine3'], $inputVisible['BillFromAddressLine4'], $inputVisible['BillFromAddressCity'], $inputVisible['BillFromAddressStateOrProvince'], $inputVisible['BillFromAddressZipOrPostalCode'], $inputVisible['BillFromAddressCountry'], $inputHidden['Id']));
-	
+
 	auditTrailLog($pdo, 'Vendor', $inputHidden['Id'], 'UPDATE');
-	
+
 	$pdo->exec('COMMIT');
 
 	$response['Response'] = 'LocalActions';

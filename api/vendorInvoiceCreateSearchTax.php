@@ -35,12 +35,12 @@ foreach ($results2 as $row){
 	if (($row['TaxGroup'] == 'PRODUCT_0')||($row['TaxGroup'] == 'SERVICE_0')){
 		$newValue['Value'] = 'EXCLUDED_'.$row['TaxGroup'];
 		$newValue['Description'] = $row['Description'];
-		$dataToReturn['Data']['Result'][] = $newValue;		
+		$dataToReturn['Data']['Result'][] = $newValue;
 	}else{
 		$newValue['Value'] = 'INCLUDED_'.$row['TaxGroup'];
 		$newValue['Description'] = $row['Description'].' - Included';
 		$dataToReturn['Data']['Result'][] = $newValue;
-		
+
 		$newValue['Value'] = 'EXCLUDED_'.$row['TaxGroup'];
 		$newValue['Description'] = $row['Description'].' - Excluded';
 		$dataToReturn['Data']['Result'][] = $newValue;

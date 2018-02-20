@@ -35,7 +35,7 @@ $ui->addField('ClearingDate',NULL,'Clearing date');
 
 $bookingRows = dbPrepareExecute($pdo, 'SELECT Id, BookingDate, Text, Amount FROM GeneralLedgerAccountBookingRow WHERE ClearingDate IS NULL AND AccountNumber=? AND SubAccountNumber=? ORDER BY BookingDate ASC, Id ASC', array($_GET['AccountNumber'], $_GET['SubAccountNumber']));
 
-foreach($bookingRows as $row){	
+foreach($bookingRows as $row){
 	$ui->addLabelTrueFalse('Row'.$row['Id'], 'Date: '.$row['BookingDate']."\nText: ".$row['Text']."\nAmount: ".decimalFormat($row['Amount']));
 	$value['Row'.$row['Id']] = False;
 }

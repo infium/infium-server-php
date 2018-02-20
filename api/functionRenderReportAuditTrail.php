@@ -19,51 +19,51 @@ require_once('config.php');
 
 function renderReportAuditTrail($type, $number){
 	$pdo = createPdo();
-	
+
 	$styleTable = ' style="border-collapse: collapse; border: 2px solid black; font-size: 11.5pt;"';
 	$styleThTd = ' style="border: 2px solid black; font-size: 11.5pt; padding: 3px;"';
-	
+
 	function getStyle($object, $extra = NULL){
 		if ($object == 'table'){
 			$style = 'border-collapse: collapse; border: 2px solid black; font-size: 11.5pt;';
 		}
-		
+
 		if ($object == 'td'){
 			$style = 'border: 2px solid black; font-size: 11.5pt; padding: 3px;';
 		}
-		
+
 		if ($extra != NULL){
 			$style = $style.' '.$extra;
 		}
-		
+
 		return $style;
 	}
-	
+
 	$pdo->exec('START TRANSACTION WITH CONSISTENT SNAPSHOT;');
 
 	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'GeneralLedgerAccountClearing')||($type == 'TaxReport')){
 		$id = dbPrepareExecute($pdo, 'SELECT Id FROM '.$type.' WHERE Number=?', array($number));
-		
+
 		$auditTrailHeader = dbPrepareExecute($pdo, 'SELECT `Operation`, `Data`, `Time`, `User`, `IP` FROM `AuditTrail` WHERE `Table`=? AND `TableId`=?', array($type, $id[0]['Id']));
-	
+
 		$rowId = dbPrepareExecute($pdo, 'SELECT Id FROM '.$type.'Row WHERE ParentId=? ORDER BY Id', array($id[0]['Id']));
 	}
 
 	if (($type == 'Customer')||($type == 'Vendor')||($type == 'Article')){
 		$id = dbPrepareExecute($pdo, 'SELECT Id FROM '.$type.' WHERE Number=?', array($number));
-		
+
 		$auditTrailHeader = dbPrepareExecute($pdo, 'SELECT `Operation`, `Data`, `Time`, `User`, `IP` FROM `AuditTrail` WHERE `Table`=? AND `TableId`=?', array($type, $id[0]['Id']));
 	}
-	
+
 	if ($type == 'User'){
 		$id = dbPrepareExecute($pdo, 'SELECT Id FROM '.$type.' WHERE Username=?', array($number));
-		
+
 		$auditTrailHeader = dbPrepareExecute($pdo, 'SELECT `Operation`, `Data`, `Time`, `User`, `IP` FROM `AuditTrail` WHERE `Table`=? AND `TableId`=?', array($type, $id[0]['Id']));
 	}
-	
+
 	$documentFootResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('DocumentFoot'));
 	$documentFoot = $documentFootResult[0]['Value'];
-	
+
 	$output = '<!DOCTYPE html>
 	<html>
 	<head>
@@ -78,7 +78,7 @@ function renderReportAuditTrail($type, $number){
 		font-size: 11.5pt;
 	}
 
-	td { 
+	td {
 	    padding: 3px;
 	}
 
@@ -87,8 +87,8 @@ function renderReportAuditTrail($type, $number){
 	}
 
 	</style>
-	
-	
+
+
 	<title>Audit trail report</title>
 	</head>
 	<body>
@@ -113,21 +113,21 @@ function renderReportAuditTrail($type, $number){
 	</td>
 	</tr>
 	</table>
-	
+
 	<div style="height: 30px;"></div>
 
 	<table style="'.getStyle('table','width: 100%;').'">';
 
 
 	if (($type == 'CustomerInvoice')||($type == 'CustomerPayment')||($type == 'VendorInvoice')||($type == 'VendorPaymentList')||($type == 'VendorPaymentCompleted')||($type == 'GeneralLedgerAccountBooking')||($type == 'GeneralLedgerAccountClearing')||($type == 'TaxReport')){
-		
+
 		$previousRowData = array();
-		
+
 		foreach ($auditTrailHeader as $row){
 			$output .= '<tr><td style="'.getStyle('td').'" colspan="2"><strong>Header - '.$row['Time'].' - '.$row['IP'].' - '.getUserName($pdo, $row['User']).' - '.$row['Operation']."</strong></td></tr>\n";
-			
+
 			$data = json_decode($row['Data'], TRUE);
-			
+
 			foreach ($data as $key => $value){
 				if (array_key_exists($key, $previousRowData)){
 					if ($previousRowData[$key] == $value){
@@ -136,19 +136,19 @@ function renderReportAuditTrail($type, $number){
 						$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 					}
 				}else{
-					$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";						
+					$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 				}
 			}
-			$previousRowData = $data;			
+			$previousRowData = $data;
 		}
-		
+
 		$rowNumber = 0;
 		foreach ($rowId as $row1){
 			$rowNumber++;
 			$auditTrailRow = dbPrepareExecute($pdo, 'SELECT `Operation`, `Data`, `Time`, `User`, `IP` FROM `AuditTrail` WHERE `Table`=? AND `TableId`=?', array($type.'Row', $row1['Id']));
-			
+
 			$previousRowData = array();
-			
+
 			foreach ($auditTrailRow as $row2){
 				$output .= '<tr><td style="'.getStyle('td').'" colspan="2"><strong>Row '.$rowNumber.' - '.$row2['Time'].' - '.$row2['IP'].' - '.getUserName($pdo, $row2['User']).' - '.$row2['Operation']."</strong></td></tr>\n";
 				$data = json_decode($row2['Data'], TRUE);
@@ -160,24 +160,24 @@ function renderReportAuditTrail($type, $number){
 							$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 						}
 					}else{
-						$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";						
+						$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 					}
 				}
 				$previousRowData = $data;
 			}
 		}
 	}
-	
-	
+
+
 	if (($type == 'Customer')||($type == 'Vendor')||($type == 'Article')||($type == 'User')){
-		
+
 		$previousRowData = array();
-		
+
 		foreach ($auditTrailHeader as $row){
 			$output .= '<tr><td style="'.getStyle('td').'" colspan="2"><strong>'.$row['Time'].' - '.$row['IP'].' - '.getUserName($pdo, $row['User']).' - '.$row['Operation']."</strong></td></tr>\n";
-			
+
 			$data = json_decode($row['Data'], TRUE);
-			
+
 			foreach ($data as $key => $value){
 				if (array_key_exists($key, $previousRowData)){
 					if ($previousRowData[$key] == $value){
@@ -186,13 +186,13 @@ function renderReportAuditTrail($type, $number){
 						$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 					}
 				}else{
-					$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";						
+					$output .= '<tr><td style="'.getStyle('td').'">'.$key.'</td><td style="'.getStyle('td').'">'.str_replace('","', '", "', $value)."</td></tr>\n";
 				}
 			}
-			$previousRowData = $data;			
+			$previousRowData = $data;
 		}
 	}
-	
+
 	$output .= '
 
 	</table>
@@ -203,9 +203,9 @@ function renderReportAuditTrail($type, $number){
 
 	</body>
 	</html>';
-	
+
 	$pdo->exec('ROLLBACK;');
-	
+
 	return $output;
 }
 ?>

@@ -41,7 +41,7 @@ foreach ($results as $row){
 	if ($row['AccountNumber'] != $lastAccount){
 		$newValue['Value'] = $row['AccountNumber'];
 		$newValue['Description'] = $row['AccountNumber'] . ' ' . $row['Description'];
-		
+
 		$dataToReturn['Data']['Result'][] = $newValue;
 	}
 	$lastAccount = $row['AccountNumber'];

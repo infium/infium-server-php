@@ -22,13 +22,13 @@ checkUserAccess('VendorPaymentListCreate');
 
 try {
 	$input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
-	
+
 	validateDate($input['BookingDate']);
-	
+
 	$vendorPaymentList = new VendorPaymentList();
-	
+
 	$vendorPaymentList->setBookingDate($input['BookingDate']);
-	
+
 	$a = 0;
 	foreach ($input as $invoiceId => $invoiceCreateBoolean){
 		if ((substr($invoiceId, 0, 3)=='Row') && ($invoiceCreateBoolean == True)){
@@ -36,7 +36,7 @@ try {
 			$a++;
 		}
 	}
-	
+
 	if ($a == 0){
 		throw new Exception('Document contains no rows.');
 	}
@@ -45,8 +45,8 @@ try {
 
 	$pdo->exec('START TRANSACTION');
 	$vendorPaymentList->validateAndWriteToDatabase($pdo);
-	$pdo->exec('COMMIT');	
-	
+	$pdo->exec('COMMIT');
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
 	$response['Data'][1]['Action'] = 'MessageFlash';

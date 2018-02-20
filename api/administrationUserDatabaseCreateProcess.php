@@ -21,19 +21,19 @@ checkUserAccess('AdministrationUserDatabaseCreate');
 
 try {
 	$input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
-	
+
 	validateUsername($input['Username']);
 
 	$pdo = createPdo();
-	
+
 	$passwordSalt = md5(mt_rand().mt_rand().mt_rand().mt_rand().mt_rand());
 	$passwordEncrypted = md5($input['Password'].$passwordSalt);
-	
+
 	$stmt = $pdo->prepare('INSERT INTO User (Name, Username, Email, PasswordSalt, PasswordEncrypted, Access) VALUES (?, ?, ?, ?, ?, ?)');
 	$stmt->execute(array($input['Name'],$input['Username'], $input['Email'], $passwordSalt, $passwordEncrypted, '[]'));
-	
+
 	auditTrailLog($pdo, 'User', $pdo->lastInsertId(), 'INSERT');
-	
+
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';
     $response['Data'][1]['Action'] = 'Reload';

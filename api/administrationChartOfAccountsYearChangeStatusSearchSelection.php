@@ -33,8 +33,8 @@ $newValueOpen['Description'] = 'Open';
 $newValueClosed['Value'] = 'Closed';
 $newValueClosed['Description'] = 'Closed';
 
-$dataToReturn['Data']['Result'][] = $newValueOpen;	
-$dataToReturn['Data']['Result'][] = $newValueClosed;	
+$dataToReturn['Data']['Result'][] = $newValueOpen;
+$dataToReturn['Data']['Result'][] = $newValueClosed;
 
 echo json_encode($dataToReturn,JSON_PRETTY_PRINT);
 ?>

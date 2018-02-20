@@ -29,14 +29,14 @@ function renderCustomerPayment($documentNumber){
 	$stmt2 = $pdo->prepare('SELECT PaymentReference, Amount FROM CustomerPaymentRow WHERE ParentId=?');
 	$stmt2->execute(array($results[0]['Id']));
 	$results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-	
+
 	$currencyResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('Currency'));
 	$currency = $currencyResult[0]['Value'];
 
 	$documentFootResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('DocumentFoot'));
 	$documentFoot = $documentFootResult[0]['Value'];
-	
-	
+
+
 	$output = '<!DOCTYPE html>
 	<html>
 	<head>
@@ -51,7 +51,7 @@ function renderCustomerPayment($documentNumber){
 		font-size: 11.5pt;
 	}
 
-	td { 
+	td {
 	    padding: 3px;
 	}
 
@@ -93,9 +93,9 @@ function renderCustomerPayment($documentNumber){
 
 	foreach ($results2 as $row){
 		$output .= '<tr><td>'.$row['PaymentReference'].'</td><td style="text-align: right;">'.decimalFormat($row['Amount'])."</td></tr>\n";
-	
+
 	}
-	
+
 	$output .= '
 
 	</table>
@@ -123,9 +123,9 @@ function renderCustomerPayment($documentNumber){
 
 	</body>
 	</html>';
-	
+
 	$pdo->exec('ROLLBACK');
-	
+
 	return $output;
 }
 ?>

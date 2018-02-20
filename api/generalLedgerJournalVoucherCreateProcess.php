@@ -34,42 +34,42 @@ try {
 	$booking->setText($input['Text']);
 
 	foreach ($input['Row'] as $bookingRow){
-		
+
 		if (($bookingRow['Debit'] != '')||($bookingRow['Credit'] != '')||($bookingRow['Account'] != '')){
 			if ($bookingRow['Debit'] == ''){
 				$debit = 0;
 			}else{
 				$debit = $bookingRow['Debit'];
 			}
-	
+
 			if ($bookingRow['Credit'] == ''){
 				$credit = 0;
 			}else{
 				$credit = $bookingRow['Credit'];
 			}
-			
+
 			if (substr($bookingRow['Account'], 0, 2) == 'C-'){
-				
+
 				$customer = dbPrepareExecute($pdo, 'SELECT Id FROM Customer WHERE Number=?', array(substr($bookingRow['Account'], 2)));
 				$booking->addRowAdvanced('1510', $customer[0]['Id'], '', '', '', $debit, $credit, '', '', '');
-				
+
 			} elseif(substr($bookingRow['Account'], 0, 2) == 'V-'){
-				
+
 				$vendor = dbPrepareExecute($pdo, 'SELECT Id FROM Vendor WHERE Number=?', array(substr($bookingRow['Account'], 2)));
 				$booking->addRowAdvanced('2441', $vendor[0]['Id'], '', '', '', $debit, $credit, '', '', '');
-				
+
 			}else{
-				
+
 				if ($bookingRow['Account'] == '1510'){
 					throw new Exception('Booking directly on account 1510 is not allowed. You need to book on a customer account.');
 				}
-				
+
 				if ($bookingRow['Account'] == '2441'){
 					throw new Exception('Booking directly on account 2441 is not allowed. You need to book on a vendor account.');
 				}
-				
+
 				$booking->addRowAdvanced($bookingRow['Account'], '', '', '', '', $debit, $credit, '', '', '');
-				
+
 			}
 		}
 	}
@@ -89,7 +89,7 @@ try {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'MessageFlash';
 	$response['Data'][0]['Message'] = 'The following error occurred: ' . $e->getMessage();
-	
+
 }
 header('Content-type: application/json');
 echo json_encode($response,JSON_PRETTY_PRINT);
