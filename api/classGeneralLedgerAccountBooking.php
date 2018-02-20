@@ -67,6 +67,9 @@ class GeneralLedgerAccountBooking
 
 	public function addRowAdvanced($newAccount, $newSubAccountNumber, $newBalanceNoteBreakdown, $newProfitCenter, $newTaxCode, $newDebit, $newCredit, $newDocumentType, $newDocumentNumber, $newClearingReference, $taxNumber = '')
 	{
+		$newDebit = round($newDebit, 2);
+		$newCredit = round($newCredit, 2);
+
 		if (!preg_match('/^[0-9]{4}$/', $newAccount)){
 			throw new Exception('The format of the account is wrong. It should be NNNN.');
 		}
