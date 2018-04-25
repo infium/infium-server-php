@@ -43,6 +43,9 @@ function renderReportProfitAndLoss($dateFrom, $dateTo, $template){
 
 	$pdo->exec('START TRANSACTION WITH CONSISTENT SNAPSHOT;');
 
+  $lastNumberResult = dbPrepareExecute($pdo, 'SELECT Number FROM GeneralLedgerAccountBooking ORDER BY Number DESC LIMIT 0, 1', array());
+	$lastNumber = $lastNumberResult[0]['Number'];
+
 	$currencyResult = dbPrepareExecute($pdo, 'SELECT Value FROM Property WHERE Property = ?', array('Currency'));
 	$currency = $currencyResult[0]['Value'];
 
@@ -89,7 +92,9 @@ function renderReportProfitAndLoss($dateFrom, $dateTo, $template){
 	<table style="'.getStyle('table','width: 100%;').'">
 	<tr><td style="'.getStyle('td').'"><strong>From</strong></td><td style="'.getStyle('td').'">'.$dateFrom.'</</td></tr>
 	<tr><td style="'.getStyle('td').'"><strong>To</strong></td><td style="'.getStyle('td').'">'.$dateTo.'</</td></tr>
-	<tr><td style="'.getStyle('td').'"><strong>Currency</strong></td><td style="'.getStyle('td').'">'.$currency.'</td></tr>
+  <tr><td style="'.getStyle('td').'"><strong>Report created</strong></td><td style="'.getStyle('td').'">'.date("Y-m-d H:i:s").'</td></tr>
+  <tr><td style="'.getStyle('td').'"><strong>Last journal voucher</strong></td><td style="'.getStyle('td').'">'.$lastNumber.'</td></tr>
+  <tr><td style="'.getStyle('td').'"><strong>Currency</strong></td><td style="'.getStyle('td').'">'.$currency.'</td></tr>
 	</table>
 
 	</td>
