@@ -20,17 +20,14 @@ require_once('config.php');
 function renderReportProfitAndLoss($dateFrom, $dateTo, $template){
 	$pdo = createPdo();
 
-	$styleTable = ' style="border-collapse: collapse; border: 2px solid black; font-size: 11.5pt;"';
-	$styleThTd = ' style="border: 2px solid black; font-size: 11.5pt; padding: 3px;"';
-
 	if (!function_exists('getStyle')) {
 		function getStyle($object, $extra = NULL){
 			if ($object == 'table'){
-				$style = 'border-collapse: collapse; border: 2px solid black; font-size: 11.5pt;';
+				$style = 'border-collapse: collapse; border: 1px solid black; font-size: 10pt;';
 			}
 
 			if ($object == 'td'){
-				$style = 'border: 2px solid black; font-size: 11.5pt; padding: 3px;';
+				$style = 'border: 1px solid black; font-size: 10pt; padding: 2px;';
 			}
 
 			if ($extra != NULL){
