@@ -125,16 +125,7 @@ function renderReportBalanceSheet($date, $template){
     return $outputSpaces;
   }
 
-	function processSection($pdo, &$output, $parentId, $parentSection, $AccountYear, $date){
-		global $level;
-		global $sumAmount;
-		global $sumRows;
-		global $baseUrl;
-		global $titleBarColorReportBalanceSheet;
-		global $pendingHeaders;
-		global $accountsInReport;
-		global $accountsInReportWithBalance;
-
+	function processSection($pdo, &$output, $parentId, $parentSection, $AccountYear, $date, &$level, &$sumAmount, &$sumRows, &$pendingHeaders, &$accountsInReport, &$accountsInReportWithBalance){
 		$itemsInSection = dbPrepareExecute($pdo, 'SELECT Id, SectionDescription, AccountNumber FROM ReportTemplateRow WHERE ParentId=? AND ParentSection=? ORDER BY \'Order\' ASC', array($parentId, $parentSection));
 		foreach ($itemsInSection as $row){
 			if ($row['SectionDescription'] != NULL){
@@ -142,7 +133,7 @@ function renderReportBalanceSheet($date, $template){
 
 				$pendingHeaders[$level] = $row['SectionDescription'];
 
-				processSection($pdo, $output, $parentId, $row['Id'], $AccountYear, $date);
+				processSection($pdo, $output, $parentId, $row['Id'], $AccountYear, $date, $level, $sumAmount, $sumRows, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
 
 				if (isset($sumRows[$level])&&($sumRows[$level]!=0)){
 					$output .= '<tr><td style="'.getStyle('td').'">'.createSpace($level - 1).'Sum '.$row['SectionDescription'].'</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumAmount[$level]).'</td></tr>'."\n";
@@ -215,9 +206,9 @@ function renderReportBalanceSheet($date, $template){
 		throw new Exception('The template does not exist in the year.');
 	}
 
-	processSection($pdo, $output, $reportTemplateId[0]['Id'], 0, $AccountYear, $date);
+	processSection($pdo, $output, $reportTemplateId[0]['Id'], 0, $AccountYear, $date, $level, $sumAmount, $sumRows, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
 
-	$accountsWithBalanceInDatabase = dbPrepareExecute($pdo, 'SELECT DISTINCT AccountNumber FROM GeneralLedgerAccountBalance WHERE Year=? AND (BookingDate<=? OR BookingDate IS NULL)', array($AccountYear, $input['Date']));
+	$accountsWithBalanceInDatabase = dbPrepareExecute($pdo, 'SELECT DISTINCT AccountNumber FROM GeneralLedgerAccountBalance WHERE Year=? AND (BookingDate<=? OR BookingDate IS NULL)', array($AccountYear, $date));
 	foreach ($accountsWithBalanceInDatabase as $accountInDatabase){
 		$exist = False;
 		foreach ($accountsInReportWithBalance as $accountInReport){
