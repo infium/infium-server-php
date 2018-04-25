@@ -59,16 +59,16 @@ function renderReportBalanceSheet($date, $template){
 	}
 
 	table, td, th {
-	    border: 2px solid black;
-		font-size: 11.5pt;
+	    border: 1px solid black;
+		font-size: 10pt;
 	}
 
 	td {
-	    padding: 3px;
+	    padding: 2px;
 	}
 
 	p {
-		font-size: 11.5pt;
+		font-size: 10pt;
 	}
 
 	</style>
@@ -76,7 +76,7 @@ function renderReportBalanceSheet($date, $template){
 	</head>
 	<body>
 
-	<table style="border: 0; width: 100%;">
+	<table style="border: 0; width: 90%; margin-left:5%; margin-right:5%;">
 	<tr style="border: 0;">
 	<td style="width: 50%; border: 0; vertical-align: middle; text-align: center;">
 	<p>
@@ -99,7 +99,7 @@ function renderReportBalanceSheet($date, $template){
 
 	<div style="height: 30px;">&nbsp;</div>
 
-	<table style="'.getStyle('table','width: 100%;').'">
+	<table style="'.getStyle('table','width: 90%; margin-left:5%; margin-right:5%;').'">
 	<tr><td style="'.getStyle('td','width: 80%;').'"><strong>Description</strong></td><td style="'.getStyle('td','width: 20%; text-align: right;').'"><strong>Amount</strong></td></tr>';
 
 	$level = 0;
