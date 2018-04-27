@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2012-2017 Infium AB
+ * Copyright 2012-2018 Infium AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,10 @@ if (checkUserAccessBoolean('ReportBalanceSheet')){
 
 if (checkUserAccessBoolean('ReportGeneralLedger')){
 	$ui->addLabelValueLink('General ledger', NULL, 'GET', $baseUrl.'reportGeneralLedgerUI.php', NULL, $titleBarColorReportGeneralLedger, NULL, 'f03a', $titleBarColorReportGeneralLedger);
+}
+
+if (checkUserAccessBoolean('GeneralLedgerJournalVoucherView')){
+	$ui->addLabelValueLink('Journal vouchers', NULL, 'GET', $baseUrl.'reportJournalVouchersUI.php', NULL, $titleBarColorReportGeneralLedger, NULL, 'f24e', $titleBarColorReportGeneralLedger);
 }
 
 if (checkUserAccessBoolean('ReportTax')){
