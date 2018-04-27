@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2012-2017 Infium AB
+ * Copyright 2012-2018 Infium AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 
 require('config.php');
 require('classUserInterface.php');
+require('functionRenderReportGeneralLedger.php');
 
 checkUserAccess('ReportGeneralLedger');
 
 try {
 	$input = json_decode(file_get_contents('php://input'), TRUE)['VisibleData'];
-
 
 	validateDate($input['DateFrom']);
 	validateDate($input['DateTo']);
@@ -31,47 +31,15 @@ try {
 		throw new Exception('The "From" date needs to be greater or equal to the "To" date.');
 	}
 
-	$AccountYear = substr($input['DateFrom'],0,4);
-
-	$pdo = createPdo();
-
-	validateAccountNumber($pdo, $AccountYear, $input['Account']);
-
-	$pdo->exec('START TRANSACTION WITH CONSISTENT SNAPSHOT');
-
-	$ui = new UserInterface();
-
-	$stmt = $pdo->prepare("SELECT Description FROM GeneralLedgerAccount WHERE Year=? AND AccountNumber=?");
-	$stmt->execute(array($AccountYear, $input['Account']));
-	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	$ui->setTitle($input['Account'].' '.$results[0]['Description'].' '.$input['DateFrom'].' - '.$input['DateTo']);
-
-	$SumResult = 0;
-
-	$stmt2 = $pdo->prepare('SELECT SUM(Amount) as Amount FROM GeneralLedgerAccountBalance WHERE Year=? AND AccountNumber=? AND (BookingDate<? OR BookingDate IS NULL)');
-	$stmt2->execute(array($AccountYear, $input['Account'], $input['DateFrom']));
-	$results2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-	$SumResult = $SumResult + $results2[0]['Amount'];
-
-	$ui->addLabelValueLink('Opening balance', decimalFormat($SumResult));
-
-	$stmt3 = $pdo->prepare('SELECT Number, BookingDate, Text, Amount FROM GeneralLedgerAccountBookingRow WHERE AccountNumber=? AND BookingDate>=? AND BookingDate<=? ORDER BY BookingDate, Id');
-	$stmt3->execute(array($input['Account'], $input['DateFrom'], $input['DateTo']));
-	$results3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($results3 as $row){
-		$SumResult += $row['Amount'];
-		$Amount = number_format($row['Amount'], 2, '.', ',');
-		$ui->addLabelValueLink($row['BookingDate']."\n".$row['Text'], $Amount, 'GET', $baseUrl.'reportGeneralLedgerRowProcess.php?Year='.$AccountYear.'&Number='.$row['Number'], NULL, $titleBarColorReportGeneralLedger);
+	if (substr($input['DateFrom'],0,4) != substr($input['DateTo'],0,4)) {
+		throw new Exception('The "From" date needs to have the same year as the "To" date.');
 	}
 
-	$ui->addLabelValueLink('Closing balance', decimalFormat($SumResult));
+	$output = renderReportGeneralLedger($input['DateFrom'], $input['DateTo'], $input['Account']);
+	header('Content-type: text/html');
+	header('Show-Print-Icon: true');
+	echo $output;
 
-	$pdo->exec('ROLLBACK');
-
-	echo $ui->getObjectAsJSONString();
 } catch (Exception $e) {
 	$response['Response'] = 'LocalActions';
 	$response['Data'][0]['Action'] = 'Pop';

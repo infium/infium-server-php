@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2012-2017 Infium AB
+ * Copyright 2012-2018 Infium AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,10 @@ $dataToReturn['Data']['SearchQuery'] = $input['SearchQuery'];
 $dataToReturn['Data']['SearchSerialNumber'] = $input['SearchSerialNumber'];
 
 $lastAccount = '';
+
+$newValue['Value'] = 'ALL';
+$newValue['Description'] = 'All accounts';
+$dataToReturn['Data']['Result'][] = $newValue;
 
 foreach ($results as $row){
 	if ($row['AccountNumber'] != $lastAccount){
