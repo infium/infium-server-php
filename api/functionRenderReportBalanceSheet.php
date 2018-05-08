@@ -111,6 +111,7 @@ function renderReportBalanceSheet($date, $template){
 
 	$sumAmount[0] = 0;
 	$sumRows[0] = 0;
+	$sumGrandTotal = 0;
 
 	$AccountYear = substr($date,0,4);
 
@@ -122,7 +123,7 @@ function renderReportBalanceSheet($date, $template){
     return $outputSpaces;
   }
 
-	function processSection($pdo, &$output, $parentId, $parentSection, $AccountYear, $date, &$level, &$sumAmount, &$sumRows, &$pendingHeaders, &$accountsInReport, &$accountsInReportWithBalance){
+	function processSection($pdo, &$output, $parentId, $parentSection, $AccountYear, $date, &$level, &$sumAmount, &$sumRows, &$sumGrandTotal, &$pendingHeaders, &$accountsInReport, &$accountsInReportWithBalance){
 		$itemsInSection = dbPrepareExecute($pdo, 'SELECT Id, SectionDescription, AccountNumber FROM ReportTemplateRow WHERE ParentId=? AND ParentSection=? ORDER BY \'Order\' ASC', array($parentId, $parentSection));
 		foreach ($itemsInSection as $row){
 			if ($row['SectionDescription'] != NULL){
@@ -130,7 +131,7 @@ function renderReportBalanceSheet($date, $template){
 
 				$pendingHeaders[$level] = $row['SectionDescription'];
 
-				processSection($pdo, $output, $parentId, $row['Id'], $AccountYear, $date, $level, $sumAmount, $sumRows, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
+				processSection($pdo, $output, $parentId, $row['Id'], $AccountYear, $date, $level, $sumAmount, $sumRows, $sumGrandTotal, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
 
 				if (isset($sumRows[$level])&&($sumRows[$level]!=0)){
 					$output .= '<tr><td style="'.getStyle('td').'">'.createSpace($level - 1).'Sum '.$row['SectionDescription'].'</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumAmount[$level]).'</td></tr>'."\n";
@@ -192,6 +193,7 @@ function renderReportBalanceSheet($date, $template){
 						$sumAmount[$level] = $accountSumAmount[0]['Amount'];
 					}
 					$accountsInReportWithBalance[] = $row['AccountNumber'];
+					$sumGrandTotal += $accountSumAmount[0]['Amount'];
 				}
 			}
 		}
@@ -203,7 +205,7 @@ function renderReportBalanceSheet($date, $template){
 		throw new Exception('The template does not exist in the year.');
 	}
 
-	processSection($pdo, $output, $reportTemplateId[0]['Id'], 0, $AccountYear, $date, $level, $sumAmount, $sumRows, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
+	processSection($pdo, $output, $reportTemplateId[0]['Id'], 0, $AccountYear, $date, $level, $sumAmount, $sumRows, $sumGrandTotal, $pendingHeaders, $accountsInReport, $accountsInReportWithBalance);
 
 	$accountsWithBalanceInDatabase = dbPrepareExecute($pdo, 'SELECT DISTINCT AccountNumber FROM GeneralLedgerAccountBalance WHERE Year=? AND (BookingDate<=? OR BookingDate IS NULL)', array($AccountYear, $date));
 	foreach ($accountsWithBalanceInDatabase as $accountInDatabase){
@@ -220,6 +222,8 @@ function renderReportBalanceSheet($date, $template){
 			}
 		}
 	}
+
+	$output .= '<tr><td style="'.getStyle('td').'">Sum of all accounts in the balance sheet</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumGrandTotal).'</td></tr>'."\n";
 
 	$output .= '
 
