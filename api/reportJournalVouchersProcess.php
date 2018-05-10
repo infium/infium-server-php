@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2012-2018 Infium AB
+ * Copyright 2012-2018 Marcus Hammar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
