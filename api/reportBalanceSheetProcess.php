@@ -57,7 +57,7 @@ try {
 
 		$SumAmount = number_format($SumResult*-1, 2, '.', ',');
 
-		$ui->addLabelValueLink('Difference', decimalFormat($SumResult*-1));
+		$ui->addLabelValueLink('CALCULATED RESULT', decimalFormat($SumResult));
 
 		$pdo->exec('ROLLBACK');
 

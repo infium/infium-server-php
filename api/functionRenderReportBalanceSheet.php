@@ -223,7 +223,7 @@ function renderReportBalanceSheet($date, $template){
 		}
 	}
 
-	$output .= '<tr><td style="'.getStyle('td').'">Sum of all accounts in the balance sheet</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumGrandTotal).'</td></tr>'."\n";
+	$output .= '<tr><td style="'.getStyle('td').'">CALCULATED RESULT</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumGrandTotal).'</td></tr>'."\n";
 
 	$output .= '
 

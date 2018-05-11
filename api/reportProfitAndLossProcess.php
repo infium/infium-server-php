@@ -58,7 +58,7 @@ try {
 			}
 		}
 
-		$ui->addLabelValueLink('Sum', decimalFormat($SumResult*-1));
+		$ui->addLabelValueLink('CALCULATED RESULT', decimalFormat($SumResult*-1));
 
 		$pdo->exec('ROLLBACK');
 

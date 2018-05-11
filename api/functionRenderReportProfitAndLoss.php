@@ -223,7 +223,7 @@ function renderReportProfitAndLoss($dateFrom, $dateTo, $template){
     }
   }
 
-	$output .= '<tr><td style="'.getStyle('td').'">Sum of all accounts in the profit and loss statement</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumGrandTotal*-1).'</td></tr>'."\n";
+	$output .= '<tr><td style="'.getStyle('td').'">CALCULATED RESULT</td><td style="'.getStyle('td','text-align: right;').'">'.decimalFormat($sumGrandTotal*-1).'</td></tr>'."\n";
 
 	$output .= '
 
